@@ -145,7 +145,6 @@ public class SteamMethodVersion {
         //@TODO Verify input
         assert !(steamMethod == null);
         assert !(input == null);
-        assert !(input.getValues().size() == this.options.size());
 
         Map<String, Object> data = input.getValues();
 
@@ -156,8 +155,8 @@ public class SteamMethodVersion {
 
             //--- If the option is required & DOES NOT exist -> error
             if(
-                (option.isRequired() || (host == SteamHost.PARTNER && option.isPartnerRequired()))
-                && !(data.containsKey(key))
+                (option.isRequired() || (host == SteamHost.PARTNER && option.isPartnerRequired())) &&
+                !(data.containsKey(key))
             ) {
                 throw new SteamMissingInputException(steamMethod, option);
             }
@@ -175,7 +174,7 @@ public class SteamMethodVersion {
 
         }
 
-        return false;
+        return true;
 
     }
 

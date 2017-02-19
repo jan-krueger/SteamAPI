@@ -57,7 +57,7 @@ public enum OptionTypes implements OptionType {
             return (
                 !(value == null) &&
                 (value instanceof Long) &&
-                ((long) value <= 0xFFFFFFFF) //-> The max value of a uint is 4294967295 or as hex 0xFFFFFFFF
+                ((Long) value >= 0 && (Long) value <= 4_294_967_295L) //-> The max value of a uint is 4294967295
             );
         }
 

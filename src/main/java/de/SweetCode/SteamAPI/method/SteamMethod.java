@@ -256,7 +256,7 @@ public abstract class SteamMethod {
             throw new IllegalArgumentException(String.format(
                 "The SteamMethod %s DOES NOT support the provided version %s. The method only supports: %s.",
                 this.getName(),
-                version.getHumanReadable(),
+                version.name(),
                 StringUtils.join(this.getSupportedVersions(), ", ")
             ));
         }
@@ -302,7 +302,7 @@ public abstract class SteamMethod {
         SteamMethodVersion methodVersion = this.get(method, host, version, visibility).get();
 
         //--- Verify input
-        if(!(methodVersion.verify(this, host, input))) {
+        if(methodVersion.verify(this, host, input)) {
 
             Request request = SteamMethod.buildRequest(this, method, host, version, input);
             try {

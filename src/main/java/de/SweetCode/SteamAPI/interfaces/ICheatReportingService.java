@@ -10,7 +10,7 @@ public class ICheatReportingService extends SteamInterface {
         this.add(new ReportPlayerCheating(this));
         this.add(new RequestPlayerGameBan(this));
         this.add(new RemovePlayerGameBan(this));
-        this.add(new GetCheatingReports(this));
+        this.add(new ICheatReportingServiceGetCheatingReports(this));
         this.add(new RequestVacStatusForUser(this));
         this.add(new StartSecureMultiplayerSession(this));
         this.add(new EndSecureMultiplayerSession(this));
