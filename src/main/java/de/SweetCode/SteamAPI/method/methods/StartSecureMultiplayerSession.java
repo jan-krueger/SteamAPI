@@ -4,7 +4,7 @@ import de.SweetCode.SteamAPI.SteamHTTPMethod;
 import de.SweetCode.SteamAPI.SteamHost;
 import de.SweetCode.SteamAPI.SteamVersion;
 import de.SweetCode.SteamAPI.SteamVisibility;
-import de.SweetCode.SteamAPI.exceptions.ICheatReportingService;
+import de.SweetCode.SteamAPI.interfaces.ICheatReportingService;
 import de.SweetCode.SteamAPI.method.SteamMethod;
 import de.SweetCode.SteamAPI.method.input.Input;
 import de.SweetCode.SteamAPI.method.option.SteamMethodVersion;

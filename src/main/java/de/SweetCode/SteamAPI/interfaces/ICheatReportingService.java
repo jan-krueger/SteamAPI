@@ -1,4 +1,4 @@
-package de.SweetCode.SteamAPI.exceptions;
+package de.SweetCode.SteamAPI.interfaces;
 
 import de.SweetCode.SteamAPI.interfaces.SteamInterface;
 import de.SweetCode.SteamAPI.method.methods.*;
