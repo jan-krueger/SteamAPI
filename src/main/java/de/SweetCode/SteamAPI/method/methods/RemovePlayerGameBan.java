@@ -6,12 +6,10 @@ import de.SweetCode.SteamAPI.SteamVersion;
 import de.SweetCode.SteamAPI.SteamVisibility;
 import de.SweetCode.SteamAPI.interfaces.ICheatReportingService;
 import de.SweetCode.SteamAPI.method.SteamMethod;
-import de.SweetCode.SteamAPI.method.input.Input;
 import de.SweetCode.SteamAPI.method.option.SteamMethodVersion;
 import de.SweetCode.SteamAPI.method.option.options.AppIDOption;
 import de.SweetCode.SteamAPI.method.option.options.KeyOption;
 import de.SweetCode.SteamAPI.method.option.options.SteamIDOption;
-import de.SweetCode.SteamAPI.method.result.SteamMethodResult;
 
 import java.util.Collections;
 
@@ -35,8 +33,4 @@ public class RemovePlayerGameBan extends SteamMethod {
         );
     }
 
-    @Override
-    public SteamMethodResult execute(SteamHTTPMethod method, SteamHost host, SteamVersion version, Input input) {
-        return null;
-    }
 }

@@ -11,12 +11,10 @@ import de.SweetCode.SteamAPI.interfaces.SteamInterface;
 import de.SweetCode.SteamAPI.method.input.Input;
 import de.SweetCode.SteamAPI.method.option.SteamMethodVersion;
 import de.SweetCode.SteamAPI.method.result.SteamMethodResult;
-import okhttp3.HttpUrl;
-import okhttp3.MediaType;
-import okhttp3.Request;
-import okhttp3.RequestBody;
+import okhttp3.*;
 import org.apache.commons.lang3.StringUtils;
 
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -31,6 +29,7 @@ import java.util.Set;
 public abstract class SteamMethod {
 
     private final static Gson GSON = new Gson();
+    private final static OkHttpClient CLIENT = new OkHttpClient();
     private final static MediaType MEDIA_TYPE_JSON = MediaType.parse("application/json; charset=utf-8");
 
     private SteamInterface steamInterface;
@@ -290,11 +289,34 @@ public abstract class SteamMethod {
      * @param method The HTTP request method.
      * @param host The host used to perform the request.
      * @param version The version of the method.
+     * @param visibility The visibility of the method.
      * @param input The required input.
      *
      * @return Never null. Gives the result of the execution.
      */
-    public abstract SteamMethodResult execute(SteamHTTPMethod method, SteamHost host, SteamVersion version, Input input);
+    public SteamMethodResult execute(SteamHTTPMethod method, SteamHost host, SteamVersion version, SteamVisibility visibility, Input input) {
+
+        //--- Verify input & grab correct version
+        this.verify(method, host, version, visibility);
+
+        SteamMethodVersion methodVersion = this.get(method, host, version, visibility).get();
+
+        //--- Verify input
+        if(!(methodVersion.verify(this, host, input))) {
+
+            Request request = SteamMethod.buildRequest(this, method, host, version, input);
+            try {
+                return new SteamMethodResult(CLIENT.newCall(request).execute().body().string());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+
+        }
+
+        return new SteamMethodResult("<no result>");
+
+    }
 
     /**
      * <p>
