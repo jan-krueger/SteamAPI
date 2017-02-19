@@ -1,11 +1,11 @@
 package de.SweetCode.SteamAPI.method;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import de.SweetCode.SteamAPI.SteamHTTPMethod;
 import de.SweetCode.SteamAPI.SteamHost;
 import de.SweetCode.SteamAPI.SteamVersion;
+import de.SweetCode.SteamAPI.SteamVisibility;
 import de.SweetCode.SteamAPI.exceptions.*;
 import de.SweetCode.SteamAPI.interfaces.SteamInterface;
 import de.SweetCode.SteamAPI.method.input.Input;
@@ -15,8 +15,12 @@ import okhttp3.HttpUrl;
 import okhttp3.MediaType;
 import okhttp3.Request;
 import okhttp3.RequestBody;
+import org.apache.commons.lang3.StringUtils;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 /**
  * <p>
@@ -112,6 +116,19 @@ public abstract class SteamMethod {
 
     /**
      * <p>
+     *    Gives a set of all supported {@link SteamVisibility visibilities}.
+     * </p>
+     *
+     * @return A set of all supported visibilities. Is never null.
+     */
+    public Set<SteamVisibility> getSupportedVisibilities() {
+        HashSet<SteamVisibility> values = new HashSet<>();
+        this.versions.forEach(e -> values.add(e.getVisibility()));
+        return values;
+    }
+
+    /**
+     * <p>
      *    Gives a list of all supported {@link SteamMethodVersion method versions}.
      * </p>
      *
@@ -126,15 +143,17 @@ public abstract class SteamMethod {
      *     Gives the {@link SteamMethodVersion} belonging to the provided configuration of host and version.
      * </p>
      *
-     * @param host The host.
-     * @param version The version.
-     *
      * @return an Optional containing the SteamMethodVersion if they exist for the provided configuration.
      */
-    public Optional<SteamMethodVersion> get(SteamHTTPMethod method, SteamHost host, SteamVersion version) {
+    public Optional<SteamMethodVersion> get(SteamHTTPMethod method, SteamHost host, SteamVersion version, SteamVisibility visibility) {
         return this.versions
                 .stream()
-                .filter(e -> e.getMethod() == method && e.getHosts().contains(host) && e.getVersion() == version)
+                .filter(e ->
+                    e.getMethod() == method &&
+                    e.getHosts().contains(host) &&
+                    e.getVersion() == version &&
+                    (e.getVisibility() == SteamVisibility.ALL || e.getVisibility() == visibility)
+                )
                 .findAny();
     }
 
@@ -179,6 +198,19 @@ public abstract class SteamMethod {
 
     /**
      * <p>
+     *     Checks if the method supports the visibility.
+     * </p>
+     *
+     * @param visibility The visibility to check.
+     *
+     * @return True, if the method supports the visibility, otherwise false.
+     */
+    public boolean supports(SteamVisibility visibility) {
+        return this.versions.stream().anyMatch(e -> e.getVisibility() == visibility);
+    }
+
+    /**
+     * <p>
      *    Can be used to verify that the host & version are not null and that that both of them are supported by the method. -
      *    The method throws automatically a {@link RuntimeException} if one of the requirements is not met.
      * </p>
@@ -186,38 +218,66 @@ public abstract class SteamMethod {
      * @param host The host to check.
      * @param version The version to check.
      */
-    protected void verify(SteamHTTPMethod method, SteamHost host, SteamVersion version) {
+    protected void verify(SteamHTTPMethod method, SteamHost host, SteamVersion version, SteamVisibility visibility) {
 
         //--- Check if the method is null OR not supported
         if(method == null) {
-            throw new SteamHTTPMethodNullException();
+            throw new IllegalArgumentException("The SteamHTTPMethod cannot be null.");
         }
 
         if(!(this.supports(method))) {
-            throw new SteamUnsupportedHTTPMethodException(this, method);
+            throw new IllegalArgumentException(String.format(
+                "The SteamMethod %s DOES NOT support the provided HTTP request method %s. The method only supports: %s.",
+                this.getName(),
+                method.name(),
+                StringUtils.join(this.getSupportedMethods(), ", ")
+            ));
         }
 
         //--- Check if the host is null OR not supported
         if(host == null) {
-            throw new SteamVersionNullException();
+            throw new IllegalArgumentException("The SteamHost cannot be null.");
         }
 
         if(!(this.supports(host))) {
-            throw new SteamUnsupportedHostException(this, host);
+            throw new IllegalArgumentException(String.format(
+                "The SteamMethod %s DOES NOT support the provided host %s. The method only supports: %s.",
+                this.getName(),
+                host.name(),
+                StringUtils.join(this.getSupportedHosts(), ", ")
+            ));
         }
 
-        //--- Check version is not null OR not supported
+        //--- Check version is null OR not supported
         if(version == null) {
-            throw new SteamVersionNullException();
+            throw new IllegalArgumentException("The SteamVersion cannot be null.");
         }
 
         if(!(this.supports(version))) {
-            throw new SteamUnsupportedVersionException(this, version);
+            throw new IllegalArgumentException(String.format(
+                "The SteamMethod %s DOES NOT support the provided version %s. The method only supports: %s.",
+                this.getName(),
+                version.getHumanReadable(),
+                StringUtils.join(this.getSupportedVersions(), ", ")
+            ));
+        }
+
+        //--- Check if visibility is null OR not supported
+        if(visibility == null) {
+            throw new IllegalArgumentException("The SteamHTTPMethod cannot be null.");
+        }
+
+        if(!(this.supports(visibility))) {
+            throw new IllegalArgumentException(String.format(
+                "The SteamMethod %s DOES NOT support the provided visibility %s. The method only supports: %s.",
+                visibility.name(),
+                this.getSupportedVisibilities()
+            ));
         }
 
         //--- Check if the method supports the host in combination WITH the version AND HTTP request method
-        if(!(this.get(method, host, version).isPresent())) {
-            throw new SteamCombinationException(this, method, host, version);
+        if(!(this.get(method, host, version, visibility).isPresent())) {
+            throw new SteamCombinationException(this, method, host, version, visibility);
         }
 
     }

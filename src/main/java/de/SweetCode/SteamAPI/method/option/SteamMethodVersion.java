@@ -3,7 +3,7 @@ package de.SweetCode.SteamAPI.method.option;
 import de.SweetCode.SteamAPI.SteamHTTPMethod;
 import de.SweetCode.SteamAPI.SteamHost;
 import de.SweetCode.SteamAPI.SteamVersion;
-import de.SweetCode.SteamAPI.exceptions.SteamInvalidOptionTypeException;
+import de.SweetCode.SteamAPI.SteamVisibility;
 import de.SweetCode.SteamAPI.exceptions.SteamMissingInputException;
 import de.SweetCode.SteamAPI.method.SteamMethod;
 import de.SweetCode.SteamAPI.method.input.Input;
@@ -22,6 +22,7 @@ public class SteamMethodVersion {
 
     private final List<SteamHost> hosts;
     private final SteamVersion version;
+    private final SteamVisibility visibility;
 
     private final Map<String, Option> options = new TreeMap<>();
 
@@ -34,17 +35,19 @@ public class SteamMethodVersion {
      * @param hosts All supported hosts.
      * @param version The version the options belong to.
      */
-    public SteamMethodVersion(SteamHTTPMethod method, List<SteamHost> hosts, SteamVersion version) {
+    public SteamMethodVersion(SteamHTTPMethod method, List<SteamHost> hosts, SteamVersion version, SteamVisibility visibility) {
 
         //@TODO Verify version
         assert !(method == null);
         assert !(hosts == null);
         assert !(hosts.isEmpty());
         assert !(version == null);
+        assert !(visibility == null);
 
         this.httpMethod = method;
         this.hosts = hosts;
         this.version = version;
+        this.visibility = visibility;
     }
 
     /**
@@ -78,6 +81,17 @@ public class SteamMethodVersion {
      */
     public SteamVersion getVersion() {
         return this.version;
+    }
+
+    /**
+     * <p>
+     *    Gives the visibility of the method.
+     * </p>
+     *
+     * @return
+     */
+    public SteamVisibility getVisibility() {
+        return this.visibility;
     }
 
     /**
@@ -150,7 +164,13 @@ public class SteamMethodVersion {
 
             //--- If the key does exist in the input & the value is of the wrong type -> error
             if(data.containsKey(key) && !(option.getOptionType().check(data.get(key)))) {
-                throw new SteamInvalidOptionTypeException(steamMethod, option, data.get(key));
+                throw new IllegalArgumentException(String.format(
+                    "The method %s expected a %s for the key %s. The value %s doesn't fit the OptionType.",
+                    steamMethod.getName(),
+                    option.getOptionType().getName(),
+                    option.getKey(),
+                    String.valueOf(data.get(key))
+                ));
             }
 
         }
@@ -181,6 +201,7 @@ public class SteamMethodVersion {
 
         private List<SteamHost> hosts = null;
         private SteamVersion version = null;
+        private SteamVisibility visibility = null;
 
         private List<Option> collection = new ArrayList<>();
 
@@ -230,6 +251,20 @@ public class SteamMethodVersion {
 
         /**
          * <p>
+         *    The visibility of the method.
+         * </p>
+         *
+         * @param visibility The visibility.
+         *
+         * @return the current builder instance.
+         */
+        public Builder visibility(SteamVisibility visibility) {
+            this.visibility = visibility;
+            return this;
+        }
+
+        /**
+         * <p>
          *    Adds the provided Option.
          * </p>
          *
@@ -250,7 +285,7 @@ public class SteamMethodVersion {
          * @return a new instance of SteamMethodVersion.
          */
         public SteamMethodVersion build() {
-            SteamMethodVersion steamMethodVersion = new SteamMethodVersion(this.method, this.hosts, this.version);
+            SteamMethodVersion steamMethodVersion = new SteamMethodVersion(this.method, this.hosts, this.version, this.visibility);
             this.collection.forEach(steamMethodVersion::add);
             return steamMethodVersion;
         }
