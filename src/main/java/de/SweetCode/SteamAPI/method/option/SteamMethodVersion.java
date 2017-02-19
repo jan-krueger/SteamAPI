@@ -172,7 +172,7 @@ public class SteamMethodVersion {
 
     /**
      * <p>
-     *    A builder pattern class to build easier SteamMethodVersion.
+     *    A builder pattern class to buildRequest easier SteamMethodVersion.
      * </p>
      */
     public static class Builder {

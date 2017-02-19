@@ -10,7 +10,6 @@ import de.SweetCode.SteamAPI.method.option.SteamMethodVersion;
 import de.SweetCode.SteamAPI.method.option.Option;
 import de.SweetCode.SteamAPI.method.option.OptionTypes;
 import de.SweetCode.SteamAPI.method.result.SteamMethodResult;
-import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -20,9 +19,9 @@ import java.util.ArrayList;
 
 public class GetGlobalAchievementPercentagesForApp extends SteamMethod {
 
-    public GetGlobalAchievementPercentagesForApp() {
+    public GetGlobalAchievementPercentagesForApp(ISteamUserStats steamInterface) {
         super(
-            new ISteamUserStats(),
+            steamInterface,
             "GetGlobalAchievementPercentagesForApp",
             new ArrayList<SteamMethodVersion>() {{
 
@@ -68,24 +67,9 @@ public class GetGlobalAchievementPercentagesForApp extends SteamMethod {
             return new SteamMethodResult();
         }
 
-        //--- Build URL
-        HttpUrl.Builder url = HttpUrl.parse(String.format(
-                "https://%s/%s/%s/%s/",
-                host.getHost(),
-                this.getInterface().getName(),
-                this.getName(),
-                version.getUrlVersion()
-        )).newBuilder();
-        input.getValues().entrySet().forEach(e -> url.addQueryParameter(e.getKey(), String.valueOf(e.getValue())));
-
-        //--- Send the request
-        OkHttpClient client = new OkHttpClient();
-        Request request = new Request.Builder()
-                .get()
-                .url(url.build())
-                .build();
-
         try {
+            OkHttpClient client = new OkHttpClient();
+            Request request = SteamMethod.buildRequest(this, method, host, version, input);
             Response response = client.newCall(request).execute();
             System.out.println(response.body().string());
         } catch (IOException e) {

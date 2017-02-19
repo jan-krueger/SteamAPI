@@ -106,7 +106,7 @@ public class Option {
 
     /**
      * <p>
-     *    A builder pattern class to build easier a Option.
+     *    A builder pattern class to buildRequest easier a Option.
      * </p>
      */
     public static class Builder {

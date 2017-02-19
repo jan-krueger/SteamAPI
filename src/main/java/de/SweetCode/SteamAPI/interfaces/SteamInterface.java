@@ -2,7 +2,9 @@ package de.SweetCode.SteamAPI.interfaces;
 
 import de.SweetCode.SteamAPI.method.SteamMethod;
 
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * <p>
@@ -14,7 +16,7 @@ public abstract class SteamInterface {
 
     private final String name;
 
-    private final List<SteamMethod> steamMethods;
+    private final Map<Class<? extends SteamMethod>, SteamMethod> steamMethods = new HashMap<>();
 
     /**
      * <p>
@@ -22,11 +24,9 @@ public abstract class SteamInterface {
      * </p>
      *
      * @param name The name of the interface which can be directly used in URLs to access the API.
-     * @param steamMethods A list of all related steam methods.
      */
-    public SteamInterface(String name, List<SteamMethod> steamMethods) {
+    public SteamInterface(String name) {
         this.name = name;
-        this.steamMethods = steamMethods;
     }
 
     /**
@@ -47,8 +47,40 @@ public abstract class SteamInterface {
      *
      * @return A list of all supported methods. Is never null. Can be empty.
      */
-    public List<SteamMethod> getSteamMethods() {
+    public Map<Class<? extends SteamMethod>, SteamMethod> getMethods() {
         return this.steamMethods;
+    }
+
+    /**
+     * <p>
+     *    Gives a method according to the provided class IF the method belongs to this interface.
+     * </p>
+     *
+     * @param method The method to search for.
+
+     * @return The SteamMethod instance.
+     */
+    public <T extends SteamMethod> T get(Class<T> method) {
+        //TODO Verify input
+        assert !(method == null);
+        assert this.steamMethods.containsKey(method);
+
+        return (T) this.steamMethods.get(method);
+    }
+
+    /**
+     * <p>
+     *    Adds a method to the interface.
+     * </p>
+     *
+     * @param method The method to add.
+     */
+    public void add(SteamMethod method) {
+        //@TODO Verify input
+        assert !(method == null);
+        assert !(this.steamMethods.containsKey(method.getClass()));
+
+        this.steamMethods.put(method.getClass(), method);
     }
 
 }

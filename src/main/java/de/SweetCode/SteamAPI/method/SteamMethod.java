@@ -1,5 +1,8 @@
 package de.SweetCode.SteamAPI.method;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import de.SweetCode.SteamAPI.SteamHTTPMethod;
 import de.SweetCode.SteamAPI.SteamHost;
 import de.SweetCode.SteamAPI.SteamVersion;
@@ -8,6 +11,10 @@ import de.SweetCode.SteamAPI.interfaces.SteamInterface;
 import de.SweetCode.SteamAPI.method.input.Input;
 import de.SweetCode.SteamAPI.method.option.SteamMethodVersion;
 import de.SweetCode.SteamAPI.method.result.SteamMethodResult;
+import okhttp3.HttpUrl;
+import okhttp3.MediaType;
+import okhttp3.Request;
+import okhttp3.RequestBody;
 
 import java.util.*;
 
@@ -18,6 +25,9 @@ import java.util.*;
  * </p>
  */
 public abstract class SteamMethod {
+
+    private final static Gson GSON = new Gson();
+    private final static MediaType MEDIA_TYPE_JSON = MediaType.parse("application/json; charset=utf-8");
 
     private SteamInterface steamInterface;
 
@@ -225,5 +235,60 @@ public abstract class SteamMethod {
      * @return Never null. Gives the result of the execution.
      */
     public abstract SteamMethodResult execute(SteamHTTPMethod method, SteamHost host, SteamVersion version, Input input);
+
+    /**
+     * <p>
+     *    Builds a {@link Request}.
+     * </p>
+     * @param steamMethod The steam method calling the buildRequest method.
+     * @param method The HTTP request method to use.
+     * @param host The host to send the request to.
+     * @param version The version of the method.
+     * @param input The input.
+     *
+     * @return a ready-to-use request, never null.
+     */
+    protected static Request buildRequest(SteamMethod steamMethod, SteamHTTPMethod method, SteamHost host, SteamVersion version, Input input) {
+
+        //--- Build URL
+        HttpUrl.Builder url = HttpUrl.parse(String.format(
+            "https://%s/%s/%s/%s/",
+            host.getHost(),
+            steamMethod.getInterface().getName(),
+            steamMethod.getName(),
+            version.getUrlVersion()
+        )).newBuilder();
+        url.addQueryParameter("format", "json");
+
+        //--- Build Request
+        Request.Builder builder = new Request.Builder();
+
+        switch (method) {
+
+            case GET: {
+                //--- Append all parameters to the url
+                builder.get();
+                input.getValues().entrySet().forEach(e -> url.addQueryParameter(e.getKey(), String.valueOf(e.getValue())));
+            }
+            break;
+
+            case POST: {
+                //--- Build a JSON payload and set it as request body
+                JsonObject payload = new JsonObject();
+                input.getValues().entrySet().forEach(e -> payload.addProperty(e.getKey(), String.valueOf(e.getValue())));
+
+                builder.post(RequestBody.create(MEDIA_TYPE_JSON, GSON.toJson(payload)));
+            }
+            break;
+
+        }
+
+        //--- Append url
+        builder.url(url.build());
+
+        return builder.build();
+
+    }
+
 
 }
