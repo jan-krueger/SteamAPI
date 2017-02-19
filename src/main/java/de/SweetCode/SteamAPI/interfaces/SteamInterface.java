@@ -1,6 +1,5 @@
 package de.SweetCode.SteamAPI.interfaces;
 
-import de.SweetCode.SteamAPI.SteamHost;
 import de.SweetCode.SteamAPI.method.SteamMethod;
 
 import java.util.List;
@@ -15,7 +14,6 @@ public abstract class SteamInterface {
 
     private final String name;
 
-    private final List<SteamHost> supportedHosts;
     private final List<SteamMethod> steamMethods;
 
     /**
@@ -24,12 +22,10 @@ public abstract class SteamInterface {
      * </p>
      *
      * @param name The name of the interface which can be directly used in URLs to access the API.
-     * @param supportedHosts A list of all supported hosts.
      * @param steamMethods A list of all related steam methods.
      */
-    public SteamInterface(String name, List<SteamHost> supportedHosts, List<SteamMethod> steamMethods) {
+    public SteamInterface(String name, List<SteamMethod> steamMethods) {
         this.name = name;
-        this.supportedHosts = supportedHosts;
         this.steamMethods = steamMethods;
     }
 
@@ -42,17 +38,6 @@ public abstract class SteamInterface {
      */
     public String getName() {
         return this.name;
-    }
-
-    /**
-     * <p>
-     *    Gives a list of all supported {@link SteamHost hosts}.
-     * </p>
-     *
-     * @return A list of all supported hosts. Always contains at least one host. Is never null.
-     */
-    public List<SteamHost> getSupportedHosts() {
-        return this.supportedHosts;
     }
 
     /**

@@ -1,14 +1,26 @@
 package de.SweetCode.SteamAPI.method.option;
 
+import de.SweetCode.SteamAPI.method.SteamMethod;
+
 /**
  * <p>
- *    Steam Web API {@link de.SweetCode.SteamAPI.method.SteamMethod SteaMethods} need to provide options (or parameters)
+ *    Steam Web API {@link SteamMethod SteaMethods} need to provide options (or parameters)
  *    when called, and these options have types. This enum represents a list of all allowed option types.
  * </p>
  */
 public enum OptionTypes implements OptionType {
 
+    /**
+     * <p>
+     *    Represents a STRING (String) in the Steam Web API and is internally represented by a {@link String}.
+     * </p>
+     */
     STRING {
+
+        @Override
+        public String getName() {
+            return "String";
+        }
 
         @Override
         public boolean check(Object value) {
@@ -36,6 +48,11 @@ public enum OptionTypes implements OptionType {
     UINT_32 {
 
         @Override
+        public String getName() {
+            return "uint32";
+        }
+
+        @Override
         public boolean check(Object value) {
             return (
                 !(value == null) &&
@@ -60,6 +77,11 @@ public enum OptionTypes implements OptionType {
     UINT_64 {
 
         @Override
+        public String getName() {
+            return "uint64";
+        }
+
+        @Override
         public boolean check(Object value) {
             return (
                 !(value == null) &&
@@ -79,6 +101,11 @@ public enum OptionTypes implements OptionType {
      * </p>
      */
     INT_32 {
+
+        @Override
+        public String getName() {
+            return "int32";
+        }
 
         @Override
         public boolean check(Object value) {
@@ -103,6 +130,11 @@ public enum OptionTypes implements OptionType {
     INT_64 {
 
         @Override
+        public String getName() {
+            return "int64";
+        }
+
+        @Override
         public boolean check(Object value) {
             return (
                 !(value == null) &&
@@ -124,6 +156,11 @@ public enum OptionTypes implements OptionType {
     FLOAT {
 
         @Override
+        public String getName() {
+            return "float";
+        }
+
+        @Override
         public boolean check(Object value) {
             return (
                 !(value == null) &&
@@ -139,10 +176,15 @@ public enum OptionTypes implements OptionType {
     },
     /**
      * <p>
-     *    Represents a BOOLEAN in the Steam Web API and is also internally represented by a {@link Boolean}.
+     *    Represents a BOOL (boolean) in the Steam Web API and is also internally represented by a {@link Boolean}.
      * </p>
      */
-    BOOLEAN {
+    BOOL {
+
+        @Override
+        public String getName() {
+            return "bool";
+        }
 
         @Override
         public boolean check(Object value) {
@@ -164,6 +206,11 @@ public enum OptionTypes implements OptionType {
      * </p>
      */
     RAW_BINARY {
+
+        @Override
+        public String getName() {
+            return "raw-binary";
+        }
 
         @Override
         public boolean check(Object value) {

@@ -4,6 +4,15 @@ public interface OptionType<T> {
 
     /**
      * <p>
+     *    The name of the option type.
+     * </p>
+     *
+     * @return The name, never null.
+     */
+    String getName();
+
+    /**
+     * <p>
      *    Check if the provided value fits into the required data type.
      * </p>
      *
