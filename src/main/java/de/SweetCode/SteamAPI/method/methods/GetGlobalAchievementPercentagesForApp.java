@@ -1,11 +1,12 @@
 package de.SweetCode.SteamAPI.method.methods;
 
+import de.SweetCode.SteamAPI.SteamHTTPMethod;
 import de.SweetCode.SteamAPI.SteamHost;
 import de.SweetCode.SteamAPI.SteamVersion;
 import de.SweetCode.SteamAPI.interfaces.ISteamUserStats;
 import de.SweetCode.SteamAPI.method.SteamMethod;
 import de.SweetCode.SteamAPI.method.input.Input;
-import de.SweetCode.SteamAPI.method.option.MethodVersion;
+import de.SweetCode.SteamAPI.method.option.SteamMethodVersion;
 import de.SweetCode.SteamAPI.method.option.Option;
 import de.SweetCode.SteamAPI.method.option.OptionTypes;
 import de.SweetCode.SteamAPI.method.result.SteamMethodResult;
@@ -23,16 +24,26 @@ public class GetGlobalAchievementPercentagesForApp extends SteamMethod {
         super(
             new ISteamUserStats(),
             "GetGlobalAchievementPercentagesForApp",
-            new ArrayList<MethodVersion>() {{
+            new ArrayList<SteamMethodVersion>() {{
 
                 this.add(
-                    MethodVersion.create()
+                    SteamMethodVersion.create()
+                        .method(SteamHTTPMethod.GET)
                         .hosts(SteamHost.PUBLIC, SteamHost.PARTNER)
                         .version(SteamVersion.V_2)
+                            .add(
+                            Option.create()
+                                .key("key")
+                                .description("The access key to authenticate.")
+                                .isPartnerRequired(true)
+                                .optionType(OptionTypes.STRING)
+                            .build()
+                        )
                         .add(
                             Option.create()
                                 .key("gameid")
                                 .description("GameID to retrieve the achievement percentage for.")
+                                .isRequired(true)
                                 .optionType(OptionTypes.UINT_64)
                             .build()
                         )
@@ -44,16 +55,16 @@ public class GetGlobalAchievementPercentagesForApp extends SteamMethod {
     }
 
     @Override
-    public SteamMethodResult execute(SteamHost host, SteamVersion version, Input input) {
+    public SteamMethodResult execute(SteamHTTPMethod method, SteamHost host, SteamVersion version, Input input) {
 
         //--- Verify host & version
-        this.verify(host, version);
+        this.verify(method, host, version);
 
         //Note: We don't need to check if the option is present, because this is what SteamMethod#verify() already does,
         // so if we pass the call above, it is fine.
-        MethodVersion methodVersion = this.get(host, version).get();
+        SteamMethodVersion steamMethodVersion = this.get(method, host, version).get();
 
-        if(methodVersion.verify(this, input)) {
+        if(steamMethodVersion.verify(this, host, input)) {
             return new SteamMethodResult();
         }
 

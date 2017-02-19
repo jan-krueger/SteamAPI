@@ -17,6 +17,7 @@ public class Option {
 
     private final OptionType optionType;
     private final boolean required;
+    private final boolean partnerRequired;
 
     /**
      * <p>
@@ -27,12 +28,14 @@ public class Option {
      * @param description The description of the option, can be null.
      * @param optionType The type of the option.
      * @param required If the option is required or not.
+     * @param partnerRequired If the option is required if the {@link de.SweetCode.SteamAPI.SteamHost#PARTNER} is used.
      */
-    public Option(String key, String description, OptionType optionType, boolean required) {
+    public Option(String key, String description, OptionType optionType, boolean required, boolean partnerRequired) {
         this.key = key;
         this.description = Optional.ofNullable(description);
         this.optionType = optionType;
         this.required = required;
+        this.partnerRequired = partnerRequired;
     }
 
     /**
@@ -80,6 +83,17 @@ public class Option {
     }
 
     /**
+     * <p>
+     *    If the option is required if it is in the {@link de.SweetCode.SteamAPI.SteamHost#PARTNER} mode.
+     * </p>
+     *
+     * @return true, if required in PARTNER mode, ohterwise false.
+     */
+    public boolean isPartnerRequired() {
+        return this.partnerRequired;
+    }
+
+    /**
      *  <p>
      *     Creates a new instance of {@link Builder}.
      *  </p>
@@ -97,11 +111,12 @@ public class Option {
      */
     public static class Builder {
 
-        private String key;
-        private String description;
+        private String key = null;
+        private String description = null;
 
-        private OptionType optionType;
-        private boolean isRequired;
+        private OptionType optionType = null;
+        private boolean isRequired = false;
+        private boolean isPartnerRequired = false;
 
         public Builder() {}
 
@@ -163,13 +178,27 @@ public class Option {
 
         /**
          * <p>
+         *     Sets if the option is required in {@link de.SweetCode.SteamAPI.SteamHost#PARTNER} mode.
+         * </p>
+         *
+         * @param isPartnerRequired If the option is required in PARTNER mode.
+         *
+         * @return the current builder instance.
+         */
+        public Builder isPartnerRequired(boolean isPartnerRequired) {
+            this.isPartnerRequired = isPartnerRequired;
+            return this;
+        }
+
+        /**
+         * <p>
          *    Builds a new instance of {@link Option} with all provided values.
          * </p>
          *
          * @return the new instance of the option, never null.
          */
         public Option build() {
-            return new Option(this.key, this.description, this.optionType, this.isRequired);
+            return new Option(this.key, this.description, this.optionType, this.isRequired, this.isPartnerRequired);
         }
 
     }

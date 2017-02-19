@@ -7,9 +7,10 @@ public class SteamMissingInputException extends RuntimeException {
 
     public SteamMissingInputException(SteamMethod steamMethod, Option option) {
         super(String.format(
-            "The method %s is missing a required input with the key %s.",
+            "The method %s is missing a required input with the key %s and type of %s.",
                 steamMethod.getName(),
-                option.getKey()
+                option.getKey(),
+                option.getOptionType().getName()
         ));
     }
 

@@ -1,5 +1,6 @@
 package de.SweetCode.SteamAPI.method.option;
 
+import de.SweetCode.SteamAPI.SteamHTTPMethod;
 import de.SweetCode.SteamAPI.SteamHost;
 import de.SweetCode.SteamAPI.SteamVersion;
 import de.SweetCode.SteamAPI.exceptions.SteamInvalidOptionTypeException;
@@ -9,7 +10,15 @@ import de.SweetCode.SteamAPI.method.input.Input;
 
 import java.util.*;
 
-public class MethodVersion {
+/**
+ * <p>
+ *    A {@link SteamMethod} can have various versions supporting different {@link Option Options}, {@link SteamVersion Steam Versions}
+ *    and/or {@link SteamHost Steam Hosts}.
+ * </p>
+ */
+public class SteamMethodVersion {
+
+    private final SteamHTTPMethod httpMethod;
 
     private final List<SteamHost> hosts;
     private final SteamVersion version;
@@ -18,21 +27,35 @@ public class MethodVersion {
 
     /**
      * <p>
-     *    Creates a new MethodVersion instance.
+     *    Creates a new SteamMethodVersion instance.
      * </p>
      *
+     * @param method The supported HTTP request method.
      * @param hosts All supported hosts.
      * @param version The version the options belong to.
      */
-    public MethodVersion(List<SteamHost> hosts, SteamVersion version) {
+    public SteamMethodVersion(SteamHTTPMethod method, List<SteamHost> hosts, SteamVersion version) {
 
         //@TODO Verify version
+        assert !(method == null);
         assert !(hosts == null);
         assert !(hosts.isEmpty());
         assert !(version == null);
 
+        this.httpMethod = method;
         this.hosts = hosts;
         this.version = version;
+    }
+
+    /**
+     * <p>
+     *    The supported HTTP request method.
+     * </p>
+     *
+     * @return the supported HTTP request method, never null.
+     */
+    public SteamHTTPMethod getMethod() {
+        return this.httpMethod;
     }
 
     /**
@@ -95,7 +118,7 @@ public class MethodVersion {
 
     /**
      * <p>
-     *     Verifies if the input fits these MethodVersion.
+     *     Verifies if the input fits these SteamMethodVersion.
      * </p>
      *
      * @param steamMethod The SteamMethod calling the verify function.
@@ -103,7 +126,7 @@ public class MethodVersion {
      *
      * @return True, if the input fits, otherwise it throws exception.
      */
-    public boolean verify(SteamMethod steamMethod, Input input) {
+    public boolean verify(SteamMethod steamMethod, SteamHost host, Input input) {
 
         //@TODO Verify input
         assert !(steamMethod == null);
@@ -118,7 +141,10 @@ public class MethodVersion {
             Option option = e.getValue();
 
             //--- If the option is required & DOES NOT exist -> error
-            if(option.isRequired() && !(data.containsKey(key))) {
+            if(
+                (option.isRequired() || (host == SteamHost.PARTNER && option.isPartnerRequired()))
+                && !(data.containsKey(key))
+            ) {
                 throw new SteamMissingInputException(steamMethod, option);
             }
 
@@ -146,13 +172,15 @@ public class MethodVersion {
 
     /**
      * <p>
-     *    A builder pattern class to build easier MethodVersion.
+     *    A builder pattern class to build easier SteamMethodVersion.
      * </p>
      */
     public static class Builder {
 
-        private List<SteamHost> hosts;
-        private SteamVersion version;
+        private SteamHTTPMethod method = null;
+
+        private List<SteamHost> hosts = null;
+        private SteamVersion version = null;
 
         private List<Option> collection = new ArrayList<>();
 
@@ -160,7 +188,21 @@ public class MethodVersion {
 
         /**
          * <p>
-         *     The host the MethodVersion belong to.
+         *    The supported HTTP request method.
+         * </p>
+         *
+         * @param method The request method.
+         *
+         * @return the current builder instance.
+         */
+        public Builder method(SteamHTTPMethod method) {
+            this.method = method;
+            return this;
+        }
+
+        /**
+         * <p>
+         *     The host the SteamMethodVersion belong to.
          * </p>
          *
          * @param hosts An array of supported hosts.
@@ -174,7 +216,7 @@ public class MethodVersion {
 
         /**
          * <p>
-         *     The version the MethodVersion belong to.
+         *     The version the SteamMethodVersion belong to.
          * </p>
          *
          * @param version The option.
@@ -202,15 +244,15 @@ public class MethodVersion {
 
         /**
          * <p>
-         *    Builds a new instance of {@link MethodVersion} with all added {@link Option options}.
+         *    Builds a new instance of {@link SteamMethodVersion} with all added {@link Option options}.
          * </p>
          *
-         * @return a new instance of MethodVersion.
+         * @return a new instance of SteamMethodVersion.
          */
-        public MethodVersion build() {
-            MethodVersion methodVersion = new MethodVersion(this.hosts, this.version);
-            this.collection.forEach(methodVersion::add);
-            return methodVersion;
+        public SteamMethodVersion build() {
+            SteamMethodVersion steamMethodVersion = new SteamMethodVersion(this.method, this.hosts, this.version);
+            this.collection.forEach(steamMethodVersion::add);
+            return steamMethodVersion;
         }
 
     }
