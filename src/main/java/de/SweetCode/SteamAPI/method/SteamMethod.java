@@ -8,7 +8,7 @@ import de.SweetCode.SteamAPI.exceptions.SteamUnsupportedVersionException;
 import de.SweetCode.SteamAPI.exceptions.SteamVersionNullException;
 import de.SweetCode.SteamAPI.interfaces.SteamInterface;
 import de.SweetCode.SteamAPI.method.input.Input;
-import de.SweetCode.SteamAPI.method.option.Options;
+import de.SweetCode.SteamAPI.method.option.MethodVersion;
 import de.SweetCode.SteamAPI.method.result.SteamMethodResult;
 
 import java.util.*;
@@ -24,7 +24,7 @@ public abstract class SteamMethod {
     private SteamInterface steamInterface;
 
     private final String name;
-    private final Map<SteamHost, List<Options>> options;
+    private final List<MethodVersion> versions;
 
     /**
      * <p>
@@ -33,12 +33,12 @@ public abstract class SteamMethod {
      *
      * @param steamInterface The SteamInterface the method belongs to.
      * @param name The name of the method which can be directly used in URLs to access the API.
-     * @param options A list with all various option types the method supports.
+     * @param versions A list with all various method versions the method supports.
      */
-    public SteamMethod(SteamInterface steamInterface, String name, Map<SteamHost, List<Options>> options) {
+    public SteamMethod(SteamInterface steamInterface, String name, List<MethodVersion> versions) {
         this.steamInterface = steamInterface;
         this.name = name;
-        this.options = options;
+        this.versions = versions;
     }
 
     /**
@@ -71,7 +71,9 @@ public abstract class SteamMethod {
      * @return A set of all supported hosts. Is never null.
      */
     public Set<SteamHost> getSupportedHosts() {
-        return this.options.keySet();
+        HashSet<SteamHost> values = new HashSet<>();
+        this.versions.forEach(e -> values.addAll(e.getHosts()));
+        return values;
     }
 
     /**
@@ -82,34 +84,34 @@ public abstract class SteamMethod {
      * @return A set of all supported versions. Is never null.
      */
     public Set<SteamVersion> getSupportedVersions() {
-        HashSet<SteamVersion> versions = new HashSet<>();
-        this.options.values().forEach(l -> l.forEach(e -> versions.add(e.getVersion())));
-        return versions;
+        HashSet<SteamVersion> values = new HashSet<>();
+        this.versions.forEach(e -> values.add(e.getVersion()));
+        return values;
     }
 
     /**
      * <p>
-     *    Gives a map of all supported {@link SteamHost hots} with their related required {@link Options}.
+     *    Gives a list of all supported {@link MethodVersion method versions}.
      * </p>
      *
-     * @return A list of all supported hosts and their options. Is never null.
+     * @return a list of all supported method variations.
      */
-    public Map<SteamHost, List<Options>> getOptions() {
-        return this.options;
+    public List<MethodVersion> getVersions() {
+        return this.versions;
     }
 
     /**
      * <p>
-     *     Gives the {@link Options} belonging to the provided configuration of host and version.
+     *     Gives the {@link MethodVersion} belonging to the provided configuration of host and version.
      * </p>
      *
      * @param host The host.
      * @param version The version.
      *
-     * @return an Optional containing the Options if they exist for the provided configuration.
+     * @return an Optional containing the MethodVersion if they exist for the provided configuration.
      */
-    public Optional<Options> get(SteamHost host, SteamVersion version) {
-        return this.options.get(host).stream().filter(e -> e.getVersion() == version).findAny();
+    public Optional<MethodVersion> get(SteamHost host, SteamVersion version) {
+        return this.versions.stream().filter(e -> e.getHosts().contains(host) && e.getVersion() == version).findAny();
     }
 
     /**
@@ -122,7 +124,7 @@ public abstract class SteamMethod {
      * @return True, if the method supports the host, otherwise false.
      */
     public boolean supports(SteamHost host) {
-        return this.options.keySet().contains(host);
+        return this.versions.stream().anyMatch(e -> e.getHosts().contains(host));
     }
 
     /**
@@ -135,7 +137,7 @@ public abstract class SteamMethod {
      * @return True, if the method supports the version, otherwise false.
      */
     public boolean supports(SteamVersion version) {
-        return this.options.values().stream().anyMatch(e -> e.stream().anyMatch(x -> x.getVersion() == version));
+        return this.versions.stream().anyMatch(e -> e.getVersion() == version);
     }
 
     /**

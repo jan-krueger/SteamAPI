@@ -5,9 +5,9 @@ import de.SweetCode.SteamAPI.SteamVersion;
 import de.SweetCode.SteamAPI.interfaces.ISteamUserStats;
 import de.SweetCode.SteamAPI.method.SteamMethod;
 import de.SweetCode.SteamAPI.method.input.Input;
+import de.SweetCode.SteamAPI.method.option.MethodVersion;
 import de.SweetCode.SteamAPI.method.option.Option;
 import de.SweetCode.SteamAPI.method.option.OptionTypes;
-import de.SweetCode.SteamAPI.method.option.Options;
 import de.SweetCode.SteamAPI.method.result.SteamMethodResult;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
@@ -15,9 +15,7 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
-import java.util.TreeMap;
+import java.util.ArrayList;
 
 public class GetGlobalAchievementPercentagesForApp extends SteamMethod {
 
@@ -25,10 +23,11 @@ public class GetGlobalAchievementPercentagesForApp extends SteamMethod {
         super(
             new ISteamUserStats(),
             "GetGlobalAchievementPercentagesForApp",
-            new TreeMap<SteamHost, List<Options>>() {{
+            new ArrayList<MethodVersion>() {{
 
-                this.put(SteamHost.PUBLIC, Arrays.asList(
-                    Options.create()
+                this.add(
+                    MethodVersion.create()
+                        .hosts(SteamHost.PUBLIC, SteamHost.PARTNER)
                         .version(SteamVersion.V_2)
                         .add(
                             Option.create()
@@ -38,7 +37,7 @@ public class GetGlobalAchievementPercentagesForApp extends SteamMethod {
                             .build()
                         )
                     .build()
-                ));
+                );
 
             }}
         );
@@ -52,9 +51,9 @@ public class GetGlobalAchievementPercentagesForApp extends SteamMethod {
 
         //Note: We don't need to check if the option is present, because this is what SteamMethod#verify() already does,
         // so if we pass the call above, it is fine.
-        Options options = this.get(host, version).get();
+        MethodVersion methodVersion = this.get(host, version).get();
 
-        if(options.verify(this, input)) {
+        if(methodVersion.verify(this, input)) {
             return new SteamMethodResult();
         }
 

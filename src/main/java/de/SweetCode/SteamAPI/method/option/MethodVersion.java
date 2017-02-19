@@ -1,34 +1,49 @@
 package de.SweetCode.SteamAPI.method.option;
 
+import de.SweetCode.SteamAPI.SteamHost;
 import de.SweetCode.SteamAPI.SteamVersion;
 import de.SweetCode.SteamAPI.exceptions.SteamInvalidOptionTypeException;
 import de.SweetCode.SteamAPI.exceptions.SteamMissingInputException;
 import de.SweetCode.SteamAPI.method.SteamMethod;
 import de.SweetCode.SteamAPI.method.input.Input;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 
-public class Options {
+public class MethodVersion {
 
+    private final List<SteamHost> hosts;
     private final SteamVersion version;
+
     private final Map<String, Option> options = new TreeMap<>();
 
     /**
      * <p>
-     *    Creates a new Options instance.
+     *    Creates a new MethodVersion instance.
      * </p>
      *
+     * @param hosts All supported hosts.
      * @param version The version the options belong to.
      */
-    public Options(SteamVersion version) {
+    public MethodVersion(List<SteamHost> hosts, SteamVersion version) {
 
         //@TODO Verify version
+        assert !(hosts == null);
+        assert !(hosts.isEmpty());
         assert !(version == null);
 
+        this.hosts = hosts;
         this.version = version;
+    }
+
+    /**
+     * <p>
+     *     All supported hosts.
+     * </p>
+     *
+     * @return a list of supported hosts.
+     */
+    public List<SteamHost> getHosts() {
+        return this.hosts;
     }
 
     /**
@@ -80,7 +95,7 @@ public class Options {
 
     /**
      * <p>
-     *     Verifies if the input fits these Options.
+     *     Verifies if the input fits these MethodVersion.
      * </p>
      *
      * @param steamMethod The SteamMethod calling the verify function.
@@ -131,19 +146,35 @@ public class Options {
 
     /**
      * <p>
-     *    A builder pattern class to build easier Options.
+     *    A builder pattern class to build easier MethodVersion.
      * </p>
      */
     public static class Builder {
 
+        private List<SteamHost> hosts;
         private SteamVersion version;
+
         private List<Option> collection = new ArrayList<>();
 
         public Builder() {}
 
         /**
          * <p>
-         *     The version the options belong to.
+         *     The host the MethodVersion belong to.
+         * </p>
+         *
+         * @param hosts An array of supported hosts.
+         *
+         * @return the current builder instance.
+         */
+        public Builder hosts(SteamHost... hosts) {
+            this.hosts = Arrays.asList(hosts);
+            return this;
+        }
+
+        /**
+         * <p>
+         *     The version the MethodVersion belong to.
          * </p>
          *
          * @param version The option.
@@ -171,15 +202,15 @@ public class Options {
 
         /**
          * <p>
-         *    Builds a new instance of {@link Options} with all added {@link Option options}.
+         *    Builds a new instance of {@link MethodVersion} with all added {@link Option options}.
          * </p>
          *
-         * @return a new instance of Options.
+         * @return a new instance of MethodVersion.
          */
-        public Options build() {
-            Options options = new Options(this.version);
-            this.collection.forEach(options::add);
-            return options;
+        public MethodVersion build() {
+            MethodVersion methodVersion = new MethodVersion(this.hosts, this.version);
+            this.collection.forEach(methodVersion::add);
+            return methodVersion;
         }
 
     }
