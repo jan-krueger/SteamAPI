@@ -6,7 +6,7 @@ import de.SweetCode.SteamAPI.SteamVersion;
 import de.SweetCode.SteamAPI.SteamVisibility;
 import de.SweetCode.SteamAPI.interfaces.ISteamWebAPIUtil;
 import de.SweetCode.SteamAPI.method.SteamMethod;
-import de.SweetCode.SteamAPI.method.option.SteamMethodVersion;
+import de.SweetCode.SteamAPI.method.SteamMethodVersion;
 import de.SweetCode.SteamAPI.method.option.options.KeyOption;
 
 import java.util.Collections;

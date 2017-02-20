@@ -9,7 +9,6 @@ import de.SweetCode.SteamAPI.SteamVisibility;
 import de.SweetCode.SteamAPI.exceptions.*;
 import de.SweetCode.SteamAPI.interfaces.SteamInterface;
 import de.SweetCode.SteamAPI.method.input.Input;
-import de.SweetCode.SteamAPI.method.option.SteamMethodVersion;
 import de.SweetCode.SteamAPI.method.result.SteamMethodResult;
 import okhttp3.*;
 import org.apache.commons.lang3.StringUtils;

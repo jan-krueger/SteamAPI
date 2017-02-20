@@ -8,7 +8,7 @@ import de.SweetCode.SteamAPI.interfaces.IAccountRecoveryService;
 import de.SweetCode.SteamAPI.method.SteamMethod;
 import de.SweetCode.SteamAPI.method.option.Option;
 import de.SweetCode.SteamAPI.method.option.OptionTypes;
-import de.SweetCode.SteamAPI.method.option.SteamMethodVersion;
+import de.SweetCode.SteamAPI.method.SteamMethodVersion;
 import de.SweetCode.SteamAPI.method.option.options.KeyOption;
 
 import java.util.Arrays;
