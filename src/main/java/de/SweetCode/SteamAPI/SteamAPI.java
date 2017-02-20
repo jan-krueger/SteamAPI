@@ -1,13 +1,13 @@
 package de.SweetCode.SteamAPI;
 
-import de.SweetCode.SteamAPI.interfaces.ISteamApps;
+import de.SweetCode.SteamAPI.interfaces.IPlayerService;
 
 public class SteamAPI {
 
     public SteamAPI() {}
 
-    public ISteamApps getISteamApps() {
-        return new ISteamApps();
+    public IPlayerService getPlayerService() {
+        return new IPlayerService();
     }
 
 }

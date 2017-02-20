@@ -4,7 +4,7 @@ import de.SweetCode.SteamAPI.SteamHTTPMethod;
 import de.SweetCode.SteamAPI.SteamHost;
 import de.SweetCode.SteamAPI.SteamVersion;
 import de.SweetCode.SteamAPI.SteamVisibility;
-import de.SweetCode.SteamAPI.interfaces.ISteamApps;
+import de.SweetCode.SteamAPI.interfaces.IPlayerService;
 import de.SweetCode.SteamAPI.method.SteamMethod;
 import de.SweetCode.SteamAPI.method.option.Option;
 import de.SweetCode.SteamAPI.method.option.OptionTypes;
@@ -16,7 +16,7 @@ import java.util.Collections;
 
 public class RecordOfflinePlaytime extends SteamMethod {
 
-    public RecordOfflinePlaytime(ISteamApps steamInterface) {
+    public RecordOfflinePlaytime(IPlayerService steamInterface) {
         super(
             steamInterface,
             "RecordOfflinePlaytime",

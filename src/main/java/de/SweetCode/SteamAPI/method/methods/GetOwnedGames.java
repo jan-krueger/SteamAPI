@@ -38,7 +38,7 @@ public class GetOwnedGames extends SteamMethod {
                     )
                     .add(
                         Option.create()
-                            .key("include_appinfo")
+                            .key("include_played_free_games")
                             .description("Free games are excluded by default. If this is set, free games the user has played will be returned.")
                             .optionType(OptionTypes.BOOL)
                             .isRequired(true)

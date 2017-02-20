@@ -9,6 +9,7 @@ import de.SweetCode.SteamAPI.method.SteamMethod;
 import de.SweetCode.SteamAPI.method.option.Option;
 import de.SweetCode.SteamAPI.method.option.OptionTypes;
 import de.SweetCode.SteamAPI.method.option.SteamMethodVersion;
+import de.SweetCode.SteamAPI.method.option.options.CountOption;
 import de.SweetCode.SteamAPI.method.option.options.KeyOption;
 import de.SweetCode.SteamAPI.method.option.options.SteamIDOption;
 
@@ -28,14 +29,7 @@ public class GetRecentlyPlayedGames extends SteamMethod {
                     .visibility(SteamVisibility.ALL)
                     .add(new KeyOption(true))
                     .add(new SteamIDOption(true))
-                    .add(
-                        Option.create()
-                            .key("count")
-                            .description("The number of games to return (0/unset: all).")
-                            .optionType(OptionTypes.STRING)
-                            .isRequired(true)
-                        .build()
-                    )
+                    .add(new CountOption(false))
                 .build()
             )
         );
