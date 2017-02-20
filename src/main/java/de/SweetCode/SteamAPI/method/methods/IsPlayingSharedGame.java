@@ -4,21 +4,22 @@ import de.SweetCode.SteamAPI.SteamHTTPMethod;
 import de.SweetCode.SteamAPI.SteamHost;
 import de.SweetCode.SteamAPI.SteamVersion;
 import de.SweetCode.SteamAPI.SteamVisibility;
-import de.SweetCode.SteamAPI.interfaces.IInventoryService;
+import de.SweetCode.SteamAPI.interfaces.IPlayerService;
 import de.SweetCode.SteamAPI.method.SteamMethod;
+import de.SweetCode.SteamAPI.method.option.Option;
+import de.SweetCode.SteamAPI.method.option.OptionTypes;
 import de.SweetCode.SteamAPI.method.option.SteamMethodVersion;
-import de.SweetCode.SteamAPI.method.option.options.AppIDOption;
 import de.SweetCode.SteamAPI.method.option.options.KeyOption;
 import de.SweetCode.SteamAPI.method.option.options.SteamIDOption;
 
 import java.util.Collections;
 
-public class GetInventory extends SteamMethod {
+public class IsPlayingSharedGame extends SteamMethod {
 
-    public GetInventory(IInventoryService steamInterface) {
+    public IsPlayingSharedGame(IPlayerService steamInterface) {
         super(
             steamInterface,
-            "GetInventory",
+            "IsPlayingSharedGame",
             Collections.singletonList(
                 SteamMethodVersion.create()
                     .method(SteamHTTPMethod.GET)
@@ -26,8 +27,15 @@ public class GetInventory extends SteamMethod {
                     .version(SteamVersion.V_1)
                     .visibility(SteamVisibility.ALL)
                     .add(new KeyOption(true))
-                    .add(new AppIDOption(true))
                     .add(new SteamIDOption(true))
+                    .add(
+                        Option.create()
+                            .key("appid_playing")
+                            .description("The game player is currently playing.")
+                            .optionType(OptionTypes.UINT_32)
+                            .isRequired(true)
+                        .build()
+                    )
                 .build()
             )
         );
