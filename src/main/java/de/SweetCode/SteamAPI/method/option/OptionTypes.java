@@ -56,8 +56,11 @@ public enum OptionTypes implements OptionType {
         public boolean check(Object value) {
             return (
                 !(value == null) &&
-                (value instanceof Long) &&
-                ((Long) value >= 0 && (Long) value <= 4_294_967_295L) //-> The max value of a uint is 4294967295
+                (
+                    ((value instanceof Long) && (Long) value >= 0 && (Long) value <= 4_294_967_295L) || //-> The max value of a uint is 4294967295
+                    ((value instanceof Integer && (Integer) value >= 0)) ||
+                    ((value instanceof Short) && (Short) value >= 0)
+                )
             );
         }
 
