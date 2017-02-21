@@ -19,12 +19,10 @@ This is the current list of all implemented services & their methods:
  - [x] IPlayerService
  - [ ] IPublishedFileService
  - [x] ISteamApps
- - [ ] ISteamBitPay
- - [ ] ISteamCDN
- - [ ] ISteamCommunity
- - [ ] ISteamDirectory
+ - [x] ISteamCDN
+ - [x] ISteamCommunity
+ - [x] ISteamDirectory
  - [ ] ISteamEconomy
- - [ ] ISteamGameOAuth (Undocumented)
  - [ ] ISteamGameServerStats
  - [ ] ISteamLeaderboards
  - [ ] ISteamMicroTxn
@@ -49,6 +47,8 @@ This is the current list of all implemented services & their methods:
  - [ ] IMobileAuthService (Undocumented)
  - [ ] IMobileNotificationService (Undocumented)
  - [ ] ITwoFactorService (Undocumented)
+ - [ ] ISteamBitPay (Undocumented)
+ - [ ] ISteamGameOAuth (Undocumented)
  - [ ] ICSGOPlayers_730
  - [ ] ICSGOServers_730
  - [ ] ICSGOTournaments_730
