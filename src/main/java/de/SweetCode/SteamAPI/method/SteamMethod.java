@@ -2,14 +2,11 @@ package de.SweetCode.SteamAPI.method;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import de.SweetCode.SteamAPI.SteamHTTPMethod;
-import de.SweetCode.SteamAPI.SteamHost;
-import de.SweetCode.SteamAPI.SteamVersion;
-import de.SweetCode.SteamAPI.SteamVisibility;
+import com.google.gson.JsonSyntaxException;
+import de.SweetCode.SteamAPI.*;
 import de.SweetCode.SteamAPI.exceptions.*;
 import de.SweetCode.SteamAPI.interfaces.SteamInterface;
 import de.SweetCode.SteamAPI.method.input.Input;
-import de.SweetCode.SteamAPI.method.result.SteamMethodResult;
 import okhttp3.*;
 import org.apache.commons.lang3.StringUtils;
 
@@ -28,7 +25,6 @@ import java.util.Set;
 public abstract class SteamMethod {
 
     private final static Gson GSON = new Gson();
-    private final static OkHttpClient CLIENT = new OkHttpClient();
     private final static MediaType MEDIA_TYPE_JSON = MediaType.parse("application/json; charset=utf-8");
 
     private SteamInterface steamInterface;
@@ -290,10 +286,15 @@ public abstract class SteamMethod {
      * @param version The version of the method.
      * @param visibility The visibility of the method.
      * @param input The required input.
-     *
-     * @return Never null. Gives the result of the execution.
+     * @param callback The callback to onResponse when done.
+     * @param async True, if the API should run an async onResponse, otherwise false.
      */
-    public SteamMethodResult execute(SteamHTTPMethod method, SteamHost host, SteamVersion version, SteamVisibility visibility, Input input) {
+    public void execute(SteamHTTPMethod method, SteamHost host, SteamVersion version, SteamVisibility visibility, Input input, SteamResponse callback, boolean async) {
+
+        //--- if required append Steam API key
+        if(!(input.contains("key")) && !(this.getInterface().getSteam().getKey() == null)) {
+            input.add("key", this.getInterface().getSteam().getKey());
+        }
 
         //--- Verify input & grab correct version
         this.verify(method, host, version, visibility);
@@ -305,15 +306,68 @@ public abstract class SteamMethod {
 
             Request request = SteamMethod.buildRequest(this, method, host, version, input);
             try {
-                return new SteamMethodResult(CLIENT.newCall(request).execute().body().string());
+
+                //--- sending the request
+
+                if(async) {
+                    this.getInterface().getSteam().getClient().newCall(request).enqueue(new Callback() {
+                        @Override
+                        public void onFailure(Call call, IOException e) {
+                            callback.onError(e.getMessage());
+                        }
+
+                        @Override
+                        public void onResponse(Call call, Response response) {
+                            //--- parse the body if possible
+                            Optional<JsonObject> parsedBody = Optional.empty();
+
+                            try {
+                                parsedBody = Optional.ofNullable(GSON.fromJson(response.body().string(), JsonObject.class));
+                            } catch (JsonSyntaxException | IOException e) {
+                                callback.onError(e.getMessage());
+                                return;
+                            }
+
+                            //--- calling the provided callback
+                            callback.onResponse(request, response, parsedBody);
+                            response.close();
+
+                        }
+                    });
+                }
+                //--- sync request
+                else {
+                    Response response = this.getInterface().getSteam().getClient().newCall(request).execute();
+
+                    //--- parse the body if possible
+                    Optional<JsonObject> parsedBody = Optional.empty();
+
+                    if(!(response == null)) {
+                        try {
+                            parsedBody = Optional.ofNullable(GSON.fromJson(response.body().string(), JsonObject.class));
+                        } catch (JsonSyntaxException e) {
+                            callback.onError(e.getMessage());
+                            return;
+                        }
+
+                        //--- calling the provided callback
+                        callback.onResponse(request, response, parsedBody);
+                        return;
+                    }
+
+                    callback.onError("Invalid response.");
+                }
+
             } catch (IOException e) {
-                e.printStackTrace();
+                callback.onError(e.getMessage());
             }
 
-
+            return;
         }
 
-        return new SteamMethodResult("<no result>");
+        throw new IllegalStateException("We never should hit this point. Please open a new issue on github.com/sweetcode/SteamAPI with" +
+                " details about the request. DO NOT forget to exclude your Steam API Key if you used one or one is visible in the code" +
+                " or information you are providing on GitHub.");
 
     }
 
@@ -329,7 +383,7 @@ public abstract class SteamMethod {
      *
      * @return a ready-to-use request, never null.
      */
-    protected static Request buildRequest(SteamMethod steamMethod, SteamHTTPMethod method, SteamHost host, SteamVersion version, Input input) {
+    private static Request buildRequest(SteamMethod steamMethod, SteamHTTPMethod method, SteamHost host, SteamVersion version, Input input) {
 
         //--- Build URL
         HttpUrl.Builder url = HttpUrl.parse(String.format(

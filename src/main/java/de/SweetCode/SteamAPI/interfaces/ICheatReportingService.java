@@ -1,11 +1,12 @@
 package de.SweetCode.SteamAPI.interfaces;
 
+import de.SweetCode.SteamAPI.SteamAPI;
 import de.SweetCode.SteamAPI.method.methods.*;
 
 public class ICheatReportingService extends SteamInterface {
 
-    public ICheatReportingService() {
-        super("ICheatReportingService");
+    public ICheatReportingService(SteamAPI steam) {
+        super(steam, "ICheatReportingService");
 
         this.add(new ReportPlayerCheating(this));
         this.add(new RequestPlayerGameBan(this));

@@ -1,10 +1,10 @@
 package de.SweetCode.SteamAPI.interfaces;
 
+import de.SweetCode.SteamAPI.SteamAPI;
 import de.SweetCode.SteamAPI.method.SteamMethod;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.TreeMap;
 
 /**
  * <p>
@@ -14,6 +14,7 @@ import java.util.TreeMap;
  */
 public abstract class SteamInterface {
 
+    private final SteamAPI steam;
     private final String name;
 
     private final Map<Class<? extends SteamMethod>, SteamMethod> steamMethods = new HashMap<>();
@@ -23,9 +24,16 @@ public abstract class SteamInterface {
      *    A constructor to create a SteamInterface.
      * </p>
      *
+     * @param steam The instance of the Steam API the interface belongs to.
      * @param name The name of the interface which can be directly used in URLs to access the API.
      */
-    public SteamInterface(String name) {
+    public SteamInterface(SteamAPI steam, String name) {
+
+        //@TODO Verify input
+        assert !(steam == null);
+        assert !(name == null);
+
+        this.steam = steam;
         this.name = name;
     }
 
@@ -38,6 +46,17 @@ public abstract class SteamInterface {
      */
     public String getName() {
         return this.name;
+    }
+
+    /**
+     * <p>
+     *    Gives the Steam API instance this interface belongs to.
+     * </p>
+     *
+     * @return The Steam API instance, never null.
+     */
+    public SteamAPI getSteam() {
+        return this.steam;
     }
 
     /**

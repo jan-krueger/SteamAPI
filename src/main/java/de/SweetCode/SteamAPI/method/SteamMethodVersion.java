@@ -153,7 +153,7 @@ public class SteamMethodVersion {
             String key = e.getKey();
             Option option = e.getValue();
 
-            //--- If the option is required & DOES NOT exist -> error
+            //--- If the option is required & DOES NOT exist -> onError
             if(
                 (option.isRequired() || (host == SteamHost.PARTNER && option.isPartnerRequired())) &&
                 !(data.containsKey(key))
@@ -161,7 +161,7 @@ public class SteamMethodVersion {
                 throw new SteamMissingInputException(steamMethod, option);
             }
 
-            //--- If the key does exist in the input & the value is of the wrong type -> error
+            //--- If the key does exist in the input & the value is of the wrong type -> onError
             if(data.containsKey(key) && !(option.getOptionType().check(data.get(key)))) {
                 throw new IllegalArgumentException(String.format(
                     "The method %s expected a %s for the key %s. The value %s doesn't fit the OptionType.",

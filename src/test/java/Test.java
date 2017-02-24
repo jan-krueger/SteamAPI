@@ -1,20 +1,35 @@
+import com.google.gson.JsonObject;
 import de.SweetCode.SteamAPI.*;
+import de.SweetCode.SteamAPI.interfaces.ISteamWebAPIUtil;
+import de.SweetCode.SteamAPI.interfaces.SteamInterface;
 import de.SweetCode.SteamAPI.method.SteamMethod;
+import de.SweetCode.SteamAPI.method.SteamResponse;
 import de.SweetCode.SteamAPI.method.input.Input;
 import de.SweetCode.SteamAPI.method.methods.*;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+
+import java.util.Optional;
 
 public class Test {
 
     public static void main(String[] args) {
 
-        SteamAPI api = new SteamAPI();
-        SteamMethod method = api.getNews().get(GetNewsForApp.class);
-        method.execute(SteamHTTPMethod.GET, SteamHost.PUBLIC, SteamVersion.V_2, SteamVisibility.ALL, Input.create()
-                    .add("appid", 730)
-                    .add("enddate", 1487366763)
-                    .add("count", 1)
-                    .add("maxlength", 20)
-                .build());
+        SteamAPI steam = new SteamAPI("dasd");
+        SteamInterface steamInterface = steam.get(ISteamWebAPIUtil.class);
+        SteamMethod method = steamInterface.get(GetSupportedAPIList.class);
+        method.execute(SteamHTTPMethod.GET, SteamHost.PUBLIC, SteamVersion.V_1, SteamVisibility.ALL, Input.empty(), new SteamResponse() {
+            @Override
+            public void onResponse(Request request, Response response, Optional<JsonObject> body) {
+                System.out.println(body.get());
+            }
+
+            @Override
+            public void onError(String message) {
+                System.out.println(message);
+            }
+        }, false);
 
     }
 

@@ -1,11 +1,12 @@
 package de.SweetCode.SteamAPI.interfaces;
 
+import de.SweetCode.SteamAPI.SteamAPI;
 import de.SweetCode.SteamAPI.method.methods.*;
 
 public class ISteamApps extends SteamInterface {
 
-    public ISteamApps() {
-        super("ISteamApps");
+    public ISteamApps(SteamAPI steam) {
+        super(steam, "ISteamApps");
 
         this.add(new GetAppBetas(this));
         this.add(new GetAppBuilds(this));
