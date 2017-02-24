@@ -2,6 +2,11 @@
 
 Documentation provided by [xpaw](https://lab.xpaw.me/steam_api_documentation.html).
 
+## TODO
+ - [ ] Creating a Wiki with proper documentation
+ - [ ] Implementing all Steam interfaces & methods
+ - [ ] Writing tests
+
 #### Currently Implemented Interfaces
 
 This is the current list of all implemented services & their methods: 

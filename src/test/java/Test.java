@@ -29,7 +29,7 @@ public class Test {
             public void onError(String message) {
                 System.out.println(message);
             }
-        }, false);
+        }, true);
 
     }
 
