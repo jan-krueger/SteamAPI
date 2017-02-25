@@ -2,10 +2,12 @@ package de.SweetCode.SteamAPI.method;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSyntaxException;
-import de.SweetCode.SteamAPI.*;
-import de.SweetCode.SteamAPI.exceptions.*;
+import de.SweetCode.SteamAPI.SteamHTTPMethod;
+import de.SweetCode.SteamAPI.SteamHost;
+import de.SweetCode.SteamAPI.SteamVersion;
+import de.SweetCode.SteamAPI.SteamVisibility;
+import de.SweetCode.SteamAPI.exceptions.SteamCombinationException;
 import de.SweetCode.SteamAPI.interfaces.SteamInterface;
 import de.SweetCode.SteamAPI.method.input.Input;
 import okhttp3.*;

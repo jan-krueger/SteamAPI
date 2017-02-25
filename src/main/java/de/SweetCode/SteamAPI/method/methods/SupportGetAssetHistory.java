@@ -11,7 +11,6 @@ import de.SweetCode.SteamAPI.method.option.Option;
 import de.SweetCode.SteamAPI.method.option.OptionTypes;
 import de.SweetCode.SteamAPI.method.option.options.AppIDOption;
 import de.SweetCode.SteamAPI.method.option.options.KeyOption;
-import de.SweetCode.SteamAPI.method.option.options.SteamIDOption;
 
 import java.util.Collections;
 
