@@ -57,7 +57,7 @@ This is the current list of all implemented services & their methods:
  - [ ] ISteamWorkshop
  - [ ] ITestExternalPrivilegeService
  - [ ] IWorkshopService
- - [ ] ISteamWebUserPresenceOAuth (Mainly Undocumented)
+ - [x] ISteamWebUserPresenceOAuth (Mainly Undocumented)
  - [x] ISteamUserOAuth (Mainly Undocumented)
  - [ ] IFriendMessagesService (Undocumented)
  - [ ] IMobileAuthService (Undocumented)
