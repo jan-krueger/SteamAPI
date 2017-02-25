@@ -54,7 +54,7 @@ This is the current list of all implemented services & their methods:
  - [x] ISteamUserStats
  - [ ] ISteamVideo
  - [x] ISteamWebAPIUtil
- - [ ] ISteamWorkshop
+ - [x] ISteamWorkshop
  - [ ] ITestExternalPrivilegeService
  - [ ] IWorkshopService
  - [x] ISteamWebUserPresenceOAuth (Mainly Undocumented)
