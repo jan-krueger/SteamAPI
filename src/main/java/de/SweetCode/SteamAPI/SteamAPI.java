@@ -41,6 +41,7 @@ public class SteamAPI {
         this.interfaces.put(ISteamNews.class, new ISteamNews(this));
         this.interfaces.put(ISteamUser.class, new ISteamUser(this));
         this.interfaces.put(ISteamUserAuth.class, new ISteamUserAuth(this));
+        this.interfaces.put(ISteamUserOAuth.class, new ISteamUserOAuth(this));
         this.interfaces.put(ISteamWebAPIUtil.class, new ISteamWebAPIUtil(this));
     }
 
