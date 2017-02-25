@@ -67,7 +67,8 @@ public class SteamAPI {
      * </p>
      *
      * @param steamInterface The steam interface.
-
+     * @param <T> the type of the Steam Interface
+     *
      * @return Returns an instance of the interface.
      */
     public <T extends SteamInterface> T get(Class<T> steamInterface) {

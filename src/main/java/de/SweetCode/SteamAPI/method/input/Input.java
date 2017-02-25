@@ -21,6 +21,8 @@ public class Input {
      *
      * @param key The key of the input.
      * @param value The value of the input.
+     *
+     * @param <T> the type of the value
      */
     public <T> void add(String key, T value) {
         this.values.put(key, value);

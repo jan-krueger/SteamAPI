@@ -76,7 +76,8 @@ public abstract class SteamInterface {
      * </p>
      *
      * @param method The method to search for.
-
+     * @param <T> the Steam Method type
+     *
      * @return The SteamMethod instance.
      */
     public <T extends SteamMethod> T get(Class<T> method) {

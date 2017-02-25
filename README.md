@@ -2,11 +2,22 @@
 
 Documentation provided by [xpaw](https://lab.xpaw.me/steam_api_documentation.html).
 
+## Usage
+```xml
+[...]
+<dependency>
+    <groupId>de.sweetcode</groupId>
+    <artifactId>SteamAPI</artifactId>
+    <version>1.0.0-alpha</version>
+</dependency>
+[...]
+```
+
 ## TODO
  - [ ] Creating a Wiki with proper documentation
  - [ ] Implementing all Steam interfaces & methods
  - [ ] Writing tests
-
+ 
 #### Currently Implemented Interfaces
 
 This is the current list of all implemented services & their methods: 

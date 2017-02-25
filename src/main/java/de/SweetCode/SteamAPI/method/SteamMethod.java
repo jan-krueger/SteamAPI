@@ -137,6 +137,11 @@ public abstract class SteamMethod {
      *     Gives the {@link SteamMethodVersion} belonging to the provided configuration of host and version.
      * </p>
      *
+     * @param method The HTTP request of the method.
+     * @param host The SteamHost the method can access.
+     * @param version The version of the Steam method.
+     * @param visibility The visibility of the method.
+     *
      * @return an Optional containing the SteamMethodVersion if they exist for the provided configuration.
      */
     public Optional<SteamMethodVersion> get(SteamHTTPMethod method, SteamHost host, SteamVersion version, SteamVisibility visibility) {
@@ -205,14 +210,16 @@ public abstract class SteamMethod {
 
     /**
      * <p>
-     *    Can be used to verify that the host & version are not null and that that both of them are supported by the method. -
-     *    The method throws automatically a {@link RuntimeException} if one of the requirements is not met.
+     *    Can be used to verify that the host and version are not null and that that both of them are supported by the method. -
+     *    The method throws a {@link RuntimeException} if one of the requirements is not met.
      * </p>
      *
+     * @param method The HTTP request method to check.
      * @param host The host to check.
      * @param version The version to check.
+     * @param visibility The visibility to check.
      */
-    protected void verify(SteamHTTPMethod method, SteamHost host, SteamVersion version, SteamVisibility visibility) {
+    private void verify(SteamHTTPMethod method, SteamHost host, SteamVersion version, SteamVisibility visibility) {
 
         //--- Check if the method is null OR not supported
         if(method == null) {

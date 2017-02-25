@@ -34,6 +34,7 @@ public class SteamMethodVersion {
      * @param method The supported HTTP request method.
      * @param hosts All supported hosts.
      * @param version The version the options belong to.
+     * @param visibility The visibility of the method.
      */
     public SteamMethodVersion(SteamHTTPMethod method, List<SteamHost> hosts, SteamVersion version, SteamVisibility visibility) {
 
@@ -88,7 +89,7 @@ public class SteamMethodVersion {
      *    Gives the visibility of the method.
      * </p>
      *
-     * @return
+     * @return The visibility of the method, never null.
      */
     public SteamVisibility getVisibility() {
         return this.visibility;
@@ -136,6 +137,7 @@ public class SteamMethodVersion {
      * </p>
      *
      * @param steamMethod The SteamMethod calling the verify function.
+     * @param host The host which is supposed to receive the provided input.
      * @param input The provided input.
      *
      * @return True, if the input fits, otherwise it throws exception.
