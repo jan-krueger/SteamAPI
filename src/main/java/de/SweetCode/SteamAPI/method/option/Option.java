@@ -2,6 +2,8 @@ package de.SweetCode.SteamAPI.method.option;
 
 import de.SweetCode.SteamAPI.method.SteamMethod;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -19,9 +21,38 @@ public class Option {
     private final boolean required;
     private final boolean partnerRequired;
 
+    private final List<String> dependencies;
+
     /**
      * <p>
-     *     Constructor to create a option.
+     *     Constructor to create an option with dependencies.
+     * </p>
+     *
+     * @param key The unique key of the option.
+     * @param dependencies The keys of the options this option is depending on.
+     * @param description The description of the option, can be null.
+     * @param optionType The type of the option.
+     * @param required If the option is required or not.
+     * @param partnerRequired If the option is required if the {@link de.SweetCode.SteamAPI.SteamHost#PARTNER} is used.
+     */
+    public Option(String key, List<String> dependencies, String description, OptionType optionType, boolean required, boolean partnerRequired) {
+
+        //@TODO Verify input
+        assert !(key == null);
+        assert !(dependencies == null);
+        assert !(optionType == null);
+
+        this.key = key;
+        this.dependencies = dependencies;
+        this.description = Optional.ofNullable(description);
+        this.optionType = optionType;
+        this.required = required;
+        this.partnerRequired = partnerRequired;
+    }
+
+    /**
+     * <p>
+     *     Constructor to create an option without dependencies.
      * </p>
      *
      * @param key The unique key of the option.
@@ -31,11 +62,7 @@ public class Option {
      * @param partnerRequired If the option is required if the {@link de.SweetCode.SteamAPI.SteamHost#PARTNER} is used.
      */
     public Option(String key, String description, OptionType optionType, boolean required, boolean partnerRequired) {
-        this.key = key;
-        this.description = Optional.ofNullable(description);
-        this.optionType = optionType;
-        this.required = required;
-        this.partnerRequired = partnerRequired;
+        this(key, new ArrayList<String>(), description, optionType, required, partnerRequired);
     }
 
     /**
@@ -47,6 +74,17 @@ public class Option {
      */
     public String getKey() {
         return this.key;
+    }
+
+    /**
+     * <p>
+     *     A list of keys describing dependencies between options.
+     * </p>
+     *
+     * @return
+     */
+    public List<String> getDependencies() {
+        return this.dependencies;
     }
 
     /**
@@ -118,6 +156,8 @@ public class Option {
         private boolean isRequired = false;
         private boolean isPartnerRequired = false;
 
+        private final List<String> dependencies = new ArrayList<>();
+
         public Builder() {}
 
         /**
@@ -131,6 +171,20 @@ public class Option {
          */
         public Builder key(String key) {
             this.key = key;
+            return this;
+        }
+
+        /**
+         * <p>
+         *    Adds a key dependency to the option.
+         * </p>
+         *
+         * @param key They key of the option dependency.
+         *
+         * @return the current builder instance.
+         */
+        public Builder addDependecy(String key) {
+            this.dependencies.add(key);
             return this;
         }
 
@@ -198,7 +252,7 @@ public class Option {
          * @return the new instance of the option, never null.
          */
         public Option build() {
-            return new Option(this.key, this.description, this.optionType, this.isRequired, this.isPartnerRequired);
+            return new Option(this.key, this.dependencies, this.description, this.optionType, this.isRequired, this.isPartnerRequired);
         }
 
     }

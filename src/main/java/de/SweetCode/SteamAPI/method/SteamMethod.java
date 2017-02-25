@@ -2,6 +2,7 @@ package de.SweetCode.SteamAPI.method;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSyntaxException;
 import de.SweetCode.SteamAPI.*;
 import de.SweetCode.SteamAPI.exceptions.*;

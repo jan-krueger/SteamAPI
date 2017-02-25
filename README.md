@@ -49,7 +49,7 @@ This is the current list of all implemented services & their methods:
  - [ ] ISteamPublishedItemVoting
  - [ ] ISteamRemoteStorage
  - [ ] ISteamSpecialSurvey
- - [ ] ISteamUser
+ - [x] ISteamUser
  - [ ] ISteamUserAuth
  - [ ] ISteamUserStats
  - [ ] ISteamVideo

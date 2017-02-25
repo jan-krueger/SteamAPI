@@ -4,6 +4,7 @@ import de.SweetCode.SteamAPI.SteamHTTPMethod;
 import de.SweetCode.SteamAPI.SteamHost;
 import de.SweetCode.SteamAPI.SteamVersion;
 import de.SweetCode.SteamAPI.SteamVisibility;
+import de.SweetCode.SteamAPI.exceptions.SteamDependencyException;
 import de.SweetCode.SteamAPI.exceptions.SteamMissingInputException;
 import de.SweetCode.SteamAPI.method.input.Input;
 import de.SweetCode.SteamAPI.method.option.Option;
@@ -172,6 +173,16 @@ public class SteamMethodVersion {
                     option.getKey(),
                     String.valueOf(data.get(key))
                 ));
+            }
+
+            //--- Check for dependencies
+            if(data.containsKey(key)) {
+                option.getDependencies().forEach(d -> {
+                    //--- If the input data doesn't contain the required dependecy
+                    if(!(data.containsKey(d))) {
+                        throw new SteamDependencyException(steamMethod, option, d);
+                    }
+                });
             }
 
         }
