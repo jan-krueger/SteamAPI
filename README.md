@@ -39,8 +39,8 @@ This is the current list of all implemented services & their methods:
  - [x] ISteamCommunity
  - [x] ISteamDirectory
  - [ ] ISteamEconomy
- - [ ] ISteamGameServerStats
- - [ ] ISteamLeaderboards
+ - [x] ISteamGameServerStats
+ - [x] ISteamLeaderboards
  - [ ] ISteamMicroTxn
  - [ ] ISteamMicroTxnSandbox
  - [x] ISteamNews
