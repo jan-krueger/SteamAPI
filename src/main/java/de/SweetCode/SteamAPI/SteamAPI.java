@@ -31,6 +31,7 @@ public class SteamAPI {
         this.interfaces.put(IAccountRecoveryService.class, new IAccountRecoveryService(this));
         this.interfaces.put(IBroadcastService.class, new IBroadcastService(this));
         this.interfaces.put(ICheatReportingService.class, new ICheatReportingService(this));
+        this.interfaces.put(IGameInventory.class, new IGameInventory(this));
         this.interfaces.put(IInventoryService.class, new IInventoryService(this));
         this.interfaces.put(IPlayerService.class, new IPlayerService(this));
         this.interfaces.put(ISteamApps.class, new ISteamApps(this));

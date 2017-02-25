@@ -28,7 +28,7 @@ This is the current list of all implemented services & their methods:
  - [ ] ICoudService
  - [ ] IEconMarketService
  - [ ] IEconService
- - [ ] IGameInventory
+ - [x] IGameInventory
  - [ ] IGameNotificationsService
  - [ ] IGameServersService
  - [x] IInventoryService
@@ -50,15 +50,15 @@ This is the current list of all implemented services & their methods:
  - [ ] ISteamRemoteStorage
  - [ ] ISteamSpecialSurvey
  - [x] ISteamUser
- - [ ] ISteamUserAuth
- - [ ] ISteamUserStats
+ - [x] ISteamUserAuth
+ - [x] ISteamUserStats
  - [ ] ISteamVideo
  - [x] ISteamWebAPIUtil
  - [ ] ISteamWorkshop
  - [ ] ITestExternalPrivilegeService
  - [ ] IWorkshopService
  - [ ] ISteamWebUserPresenceOAuth (Mainly Undocumented)
- - [ ] ISteamUserOAuth (Mainly Undocumented)
+ - [x] ISteamUserOAuth (Mainly Undocumented)
  - [ ] IFriendMessagesService (Undocumented)
  - [ ] IMobileAuthService (Undocumented)
  - [ ] IMobileNotificationService (Undocumented)
