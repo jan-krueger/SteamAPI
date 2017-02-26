@@ -25,7 +25,6 @@ This is the current list of all implemented services & their methods:
  - [x] IAccountRecoveryService
  - [x] IBroadCastService
  - [x] ICheatReportingService
- - [ ] ICoudService
  - [ ] IEconMarketService
  - [ ] IEconService
  - [x] IGameInventory
@@ -57,14 +56,6 @@ This is the current list of all implemented services & their methods:
  - [x] ISteamWorkshop
  - [ ] ITestExternalPrivilegeService
  - [ ] IWorkshopService
- - [x] ISteamWebUserPresenceOAuth (Mainly Undocumented)
- - [x] ISteamUserOAuth (Mainly Undocumented)
- - [ ] IFriendMessagesService (Undocumented)
- - [ ] IMobileAuthService (Undocumented)
- - [ ] IMobileNotificationService (Undocumented)
- - [ ] ITwoFactorService (Undocumented)
- - [ ] ISteamBitPay (Undocumented)
- - [ ] ISteamGameOAuth (Undocumented)
  - [ ] ICSGOPlayers_730
  - [ ] ICSGOServers_730
  - [ ] ICSGOTournaments_730
@@ -104,3 +95,12 @@ This is the current list of all implemented services & their methods:
  - [ ] ITFPromos_841
  - [ ] ITFPromos_205790
  - [ ] ITFSystem_440
+ - [x] ISteamWebUserPresenceOAuth (Mainly Undocumented)
+ - [x] ISteamUserOAuth (Mainly Undocumented)
+ - [ ] IFriendMessagesService (Undocumented)
+ - [ ] IMobileAuthService (Undocumented)
+ - [ ] IMobileNotificationService (Undocumented)
+ - [ ] ITwoFactorService (Undocumented)
+ - [ ] ISteamBitPay (Undocumented)
+ - [ ] ISteamGameOAuth (Undocumented)
+ - [ ] ICloudService (Undocumented) 
