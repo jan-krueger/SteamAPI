@@ -25,8 +25,8 @@ This is the current list of all implemented services & their methods:
  - [x] IAccountRecoveryService
  - [x] IBroadCastService
  - [x] ICheatReportingService
- - [ ] IEconMarketService
- - [ ] IEconService
+ - [x] IEconMarketService
+ - [x] IEconService
  - [x] IGameInventory
  - [ ] IGameNotificationsService
  - [ ] IGameServersService
