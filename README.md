@@ -3,15 +3,7 @@
 Documentation provided by [xpaw](https://lab.xpaw.me/steam_api_documentation.html).
 
 ## Usage
-```xml
-[...]
-<dependency>
-    <groupId>de.sweetcode</groupId>
-    <artifactId>SteamAPI</artifactId>
-    <version>1.0.0-alpha</version>
-</dependency>
-[...]
-```
+[https://mvnrepository.com/artifact/de.sweetcode/SteamAPI](https://mvnrepository.com/artifact/de.sweetcode/SteamAPI)
 
 ## TODO
  - [ ] Creating a Wiki with proper documentation
@@ -28,7 +20,7 @@ This is the current list of all implemented services & their methods:
  - [x] IEconMarketService
  - [x] IEconService
  - [x] IGameInventory
- - [ ] IGameNotificationsService
+ - [x] IGameNotificationsService
  - [ ] IGameServersService
  - [x] IInventoryService
  - [x] IPlayerService
