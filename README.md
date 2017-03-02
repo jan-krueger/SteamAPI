@@ -21,7 +21,7 @@ This is the current list of all implemented services & their methods:
  - [x] IEconService
  - [x] IGameInventory
  - [x] IGameNotificationsService
- - [ ] IGameServersService
+ - [x] IGameServersService
  - [x] IInventoryService
  - [x] IPlayerService
  - [ ] IPublishedFileService
