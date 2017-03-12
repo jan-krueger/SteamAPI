@@ -24,7 +24,6 @@ This is the current list of all implemented services & their methods:
  - [x] IGameServersService
  - [x] IInventoryService
  - [x] IPlayerService
- - [ ] IPublishedFileService
  - [x] ISteamApps
  - [x] ISteamCDN
  - [x] ISteamCommunity
@@ -38,12 +37,12 @@ This is the current list of all implemented services & their methods:
  - [ ] ISteamPayPalPaymentsHub
  - [ ] ISteamPublishedItemSearch
  - [ ] ISteamPublishedItemVoting
- - [ ] ISteamRemoteStorage
- - [ ] ISteamSpecialSurvey
+ - [x] ISteamRemoteStorage
+ - [x] ISteamSpecialSurvey
  - [x] ISteamUser
  - [x] ISteamUserAuth
  - [x] ISteamUserStats
- - [ ] ISteamVideo
+ - [x] ISteamVideo
  - [x] ISteamWebAPIUtil
  - [x] ISteamWorkshop
  - [ ] ITestExternalPrivilegeService
@@ -87,6 +86,7 @@ This is the current list of all implemented services & their methods:
  - [ ] ITFPromos_841
  - [ ] ITFPromos_205790
  - [ ] ITFSystem_440
+ - [ ] IPublishedFileService (Mainly Undocumented)
  - [x] ISteamWebUserPresenceOAuth (Mainly Undocumented)
  - [x] ISteamUserOAuth (Mainly Undocumented)
  - [ ] IFriendMessagesService (Undocumented)

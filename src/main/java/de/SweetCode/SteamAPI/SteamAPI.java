@@ -45,9 +45,12 @@ public class SteamAPI {
         this.interfaces.put(ISteamGameServerStats.class, new ISteamGameServerStats(this));
         this.interfaces.put(ISteamLeaderboards.class, new ISteamLeaderboards(this));
         this.interfaces.put(ISteamNews.class, new ISteamNews(this));
+        this.interfaces.put(ISteamRemoteStorage.class, new ISteamRemoteStorage(this));
+        this.interfaces.put(ISteamSpecialSurvey.class, new ISteamSpecialSurvey(this));
         this.interfaces.put(ISteamUser.class, new ISteamUser(this));
         this.interfaces.put(ISteamUserAuth.class, new ISteamUserAuth(this));
         this.interfaces.put(ISteamUserOAuth.class, new ISteamUserOAuth(this));
+        this.interfaces.put(ISteamVideo.class, new ISteamVideo(this));
         this.interfaces.put(ISteamWebAPIUtil.class, new ISteamWebAPIUtil(this));
         this.interfaces.put(ISteamWebUserPresenceOAuth.class, new ISteamWebUserPresenceOAuth(this));
         this.interfaces.put(ISteamWorkshop.class, new ISteamWorkshop(this));

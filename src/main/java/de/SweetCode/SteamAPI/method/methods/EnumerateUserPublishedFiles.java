@@ -25,7 +25,7 @@ public class EnumerateUserPublishedFiles extends SteamMethod {
                     .hosts(SteamHost.PUBLIC, SteamHost.PARTNER)
                     .version(SteamVersion.V_1)
                     .visibility(SteamVisibility.PUBLISHER)
-                    .add(new KeyOption(true))
+                    .add(new KeyOption(false))
                     .add(new SteamIDOption(true))
                     .add(new AppIDOption(true))
                 .build()
