@@ -2,6 +2,7 @@ package de.SweetCode.SteamAPI.method;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSyntaxException;
 import de.SweetCode.SteamAPI.SteamHTTPMethod;
 import de.SweetCode.SteamAPI.SteamHost;
@@ -333,7 +334,10 @@ public abstract class SteamMethod {
 
                             try {
                                 parsedBody = Optional.ofNullable(GSON.fromJson(response.body().string(), JsonObject.class));
-                            } catch (JsonSyntaxException | IOException e) {
+                            } catch (JsonSyntaxException e) {
+                                callback.onResponse(request, response, Optional.empty());
+                                return;
+                            } catch (IOException e) {
                                 callback.onError(e.getMessage());
                                 return;
                             }
@@ -356,6 +360,9 @@ public abstract class SteamMethod {
                         try {
                             parsedBody = Optional.ofNullable(GSON.fromJson(response.body().string(), JsonObject.class));
                         } catch (JsonSyntaxException e) {
+                            callback.onResponse(request, response, Optional.empty());
+                            return;
+                        } catch (IOException e) {
                             callback.onError(e.getMessage());
                             return;
                         }

@@ -1,4 +1,5 @@
 import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
 import de.SweetCode.SteamAPI.*;
 import de.SweetCode.SteamAPI.interfaces.ISteamUser;
 import de.SweetCode.SteamAPI.interfaces.ISteamWebAPIUtil;
@@ -11,6 +12,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
+import java.io.IOException;
 import java.util.Optional;
 
 public class Test {
@@ -28,7 +30,7 @@ public class Test {
                 .build(), new SteamResponse() {
             @Override
             public void onResponse(Request request, Response response, Optional<JsonObject> body) {
-                System.out.println(body.get());
+                System.out.println(response.code());
             }
 
             @Override

@@ -1,6 +1,7 @@
 package de.SweetCode.SteamAPI.method;
 
 import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
 import de.SweetCode.SteamAPI.SteamHTTPMethod;
 import de.SweetCode.SteamAPI.SteamHost;
 import de.SweetCode.SteamAPI.SteamVersion;
@@ -21,7 +22,7 @@ public interface SteamResponse {
      *
      * @param request The original request send to Steam's web server.
      * @param response The original response we received.
-     * @param body The parsed body, if possible.
+     * @param body The parsed body, if possible otherwise it is {@link Optional#empty()}.
      */
     void onResponse(Request request, Response response, Optional<JsonObject> body);
 
