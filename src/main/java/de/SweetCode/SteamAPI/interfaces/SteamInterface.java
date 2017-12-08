@@ -1,5 +1,6 @@
 package de.SweetCode.SteamAPI.interfaces;
 
+import de.SweetCode.SteamAPI.utils.Assert;
 import de.SweetCode.SteamAPI.SteamAPI;
 import de.SweetCode.SteamAPI.method.SteamMethod;
 
@@ -29,9 +30,8 @@ public abstract class SteamInterface {
      */
     public SteamInterface(SteamAPI steam, String name) {
 
-        //@TODO Verify input
-        assert !(steam == null);
-        assert !(name == null);
+        Assert.isNonEmpty(steam, "The instance of the SteamAPI cannot be null.");
+        Assert.isNonEmpty(name, "The name of the interface cannot be null or empty.");
 
         this.steam = steam;
         this.name = name;
@@ -81,9 +81,9 @@ public abstract class SteamInterface {
      * @return The SteamMethod instance.
      */
     public <T extends SteamMethod> T get(Class<T> method) {
-        //TODO Verify input
-        assert !(method == null);
-        assert this.steamMethods.containsKey(method);
+
+        Assert.isNonEmpty(method, "The method cannot be null.");
+        Assert.is(true, this.steamMethods.containsKey(method), "The method %s could not be found.", method.getClass().getName());
 
         return (T) this.steamMethods.get(method);
     }
@@ -96,9 +96,15 @@ public abstract class SteamInterface {
      * @param method The method to add.
      */
     public void add(SteamMethod method) {
-        //@TODO Verify input
-        assert !(method == null);
-        assert !(this.steamMethods.containsKey(method.getClass()));
+
+        Assert.isNonEmpty(method, "The method cannot be null.");
+        Assert.is(
+                    false,
+                    this.steamMethods.containsKey(method.getClass()),
+                    "The method %s is already part of this interface %s.",
+                    method.getName(),
+                    this.getName()
+                );
 
         this.steamMethods.put(method.getClass(), method);
     }

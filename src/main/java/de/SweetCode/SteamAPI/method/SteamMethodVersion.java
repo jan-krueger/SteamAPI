@@ -1,13 +1,11 @@
 package de.SweetCode.SteamAPI.method;
 
-import de.SweetCode.SteamAPI.SteamHTTPMethod;
-import de.SweetCode.SteamAPI.SteamHost;
-import de.SweetCode.SteamAPI.SteamVersion;
-import de.SweetCode.SteamAPI.SteamVisibility;
+import de.SweetCode.SteamAPI.*;
 import de.SweetCode.SteamAPI.exceptions.SteamDependencyException;
 import de.SweetCode.SteamAPI.exceptions.SteamMissingInputException;
 import de.SweetCode.SteamAPI.method.input.Input;
 import de.SweetCode.SteamAPI.method.option.Option;
+import de.SweetCode.SteamAPI.utils.Assert;
 
 import java.util.*;
 
@@ -39,12 +37,10 @@ public class SteamMethodVersion {
      */
     public SteamMethodVersion(SteamHTTPMethod method, List<SteamHost> hosts, SteamVersion version, SteamVisibility visibility) {
 
-        //@TODO Verify version
-        assert !(method == null);
-        assert !(hosts == null);
-        assert !(hosts.isEmpty());
-        assert !(version == null);
-        assert !(visibility == null);
+        Assert.isNonEmpty(method, "The method cannot be null.");
+        Assert.isNonEmpty(hosts, "Hosts cannot be null or empty.");
+        Assert.isNonEmpty(version, "The version cannot be null.");
+        Assert.isNonEmpty(visibility, "The visibility cannot be null.");
 
         this.httpMethod = method;
         this.hosts = hosts;
@@ -107,9 +103,8 @@ public class SteamMethodVersion {
      */
     public Option get(String key) {
 
-        //@TODO Verify input
-        assert !(key == null);
-        assert this.options.containsKey(key);
+        Assert.isNonEmpty(key, "The key cannot be null or empty.");
+        Assert.is(true, this.options.containsKey(key), "An option with the key (%s) does not exist.");
 
         return this.options.get(key);
 
@@ -124,9 +119,8 @@ public class SteamMethodVersion {
      */
     public void add(Option option) {
 
-        //@TODO Verify input
-        assert !(option == null);
-        assert !(this.options.containsKey(option.getKey()));
+        Assert.isNonEmpty(option, "Option cannot be null.");
+        Assert.is(false, this.options.containsKey(option.getKey()), "An option with the same key (%s) already exists.", option.getKey());
 
         this.options.put(option.getKey(), option);
 
@@ -145,9 +139,9 @@ public class SteamMethodVersion {
      */
     public boolean verify(SteamMethod steamMethod, SteamHost host, Input input) {
 
-        //@TODO Verify input
-        assert !(steamMethod == null);
-        assert !(input == null);
+        Assert.isNonEmpty(steamMethod, "The method cannot be null.");
+        Assert.isNonEmpty(host, "The host cannot be null.");
+        Assert.isNonEmpty(input, "The input cannot be null.");
 
         Map<String, Object> data = input.getValues();
 
@@ -167,11 +161,12 @@ public class SteamMethodVersion {
             //--- If the key does exist in the input & the value is of the wrong type -> onError
             if(data.containsKey(key) && !(option.getOptionType().check(data.get(key)))) {
                 throw new IllegalArgumentException(String.format(
-                    "The method %s expected a %s for the key %s. The value %s doesn't fit the OptionType.",
+                    "The method %s expected a %s for the key %s. The value %s doesn't fit the OptionType %s.",
                     steamMethod.getName(),
                     option.getOptionType().getName(),
                     option.getKey(),
-                    String.valueOf(data.get(key))
+                    String.valueOf(data.get(key)),
+                    option.getOptionType().getName()
                 ));
             }
 

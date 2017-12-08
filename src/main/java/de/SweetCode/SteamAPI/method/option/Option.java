@@ -1,5 +1,6 @@
 package de.SweetCode.SteamAPI.method.option;
 
+import de.SweetCode.SteamAPI.utils.Assert;
 import de.SweetCode.SteamAPI.method.SteamMethod;
 
 import java.util.ArrayList;
@@ -37,10 +38,10 @@ public class Option {
      */
     public Option(String key, List<String> dependencies, String description, OptionType optionType, boolean required, boolean partnerRequired) {
 
-        //@TODO Verify input
-        assert !(key == null);
-        assert !(dependencies == null);
-        assert !(optionType == null);
+
+        Assert.isNonEmpty(key, "The key cannot be empty or null.");
+        Assert.is(true, dependencies != null, "The dependencies cannot be null.");
+        Assert.isNonEmpty(optionType, "The OptionType cannot be null.");
 
         this.key = key;
         this.dependencies = dependencies;
@@ -62,7 +63,7 @@ public class Option {
      * @param partnerRequired If the option is required if the {@link de.SweetCode.SteamAPI.SteamHost#PARTNER} is used.
      */
     public Option(String key, String description, OptionType optionType, boolean required, boolean partnerRequired) {
-        this(key, new ArrayList<String>(), description, optionType, required, partnerRequired);
+        this(key, new ArrayList<>(), description, optionType, required, partnerRequired);
     }
 
     /**

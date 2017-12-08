@@ -4,15 +4,13 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSyntaxException;
-import de.SweetCode.SteamAPI.SteamHTTPMethod;
-import de.SweetCode.SteamAPI.SteamHost;
-import de.SweetCode.SteamAPI.SteamVersion;
-import de.SweetCode.SteamAPI.SteamVisibility;
+import de.SweetCode.SteamAPI.*;
 import de.SweetCode.SteamAPI.exceptions.SteamCombinationException;
 import de.SweetCode.SteamAPI.interfaces.SteamInterface;
 import de.SweetCode.SteamAPI.method.input.Input;
 import okhttp3.*;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.util.HashSet;
@@ -275,6 +273,7 @@ public abstract class SteamMethod {
         if(!(this.supports(visibility))) {
             throw new IllegalArgumentException(String.format(
                 "The SteamMethod %s DOES NOT support the provided visibility %s. The method only supports: %s.",
+                this.getName(),
                 visibility.name(),
                 this.getSupportedVisibilities()
             ));
@@ -302,9 +301,14 @@ public abstract class SteamMethod {
      */
     public void execute(SteamHTTPMethod method, SteamHost host, SteamVersion version, SteamVisibility visibility, Input input, SteamResponse callback, boolean async) {
 
+        Logger logger = SteamAPI.logger();
+
         //--- if required append Steam API key
         if(!(input.contains("key")) && !(this.getInterface().getSteam().getKey() == null)) {
             input.add("key", this.getInterface().getSteam().getKey());
+            logger.debug("Automatically added the provided Steam API key to the %s method request.", method.name());
+        } else {
+            logger.debug("Didn't find a key to automatically add it to the %s method request.", method.name());
         }
 
         //--- Verify input & grab correct version
