@@ -1,15 +1,6 @@
 package de.SweetCode.SteamAPI;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-import de.SweetCode.SteamAPI.collection.SteamBadge;
-import de.SweetCode.SteamAPI.collection.SteamUser;
-import de.SweetCode.SteamAPI.collection.SteamUserAvatar;
 import de.SweetCode.SteamAPI.interfaces.*;
-import de.SweetCode.SteamAPI.method.input.Input;
-import de.SweetCode.SteamAPI.method.methods.GetBadges;
-import de.SweetCode.SteamAPI.method.methods.GetOwnedGames;
-import de.SweetCode.SteamAPI.method.methods.GetPlayerSummaries;
 import de.SweetCode.SteamAPI.utils.Assert;
 import okhttp3.OkHttpClient;
 import org.apache.logging.log4j.LogManager;
@@ -114,111 +105,6 @@ public class SteamAPI {
         Assert.is(this.interfaces.containsKey(steamInterface), true, "This interface %s does not exist.", steamInterface.getName());
 
         return (T) this.interfaces.get(steamInterface);
-    }
-
-    public SteamUser createSteamUser(long steamid) {
-
-        IPlayerService playerService = this.get(IPlayerService.class);
-        ISteamUser steamUser = this.get(ISteamUser.class);
-        SteamUser.Builder builder = SteamUser.builder(steamid);
-
-        //--- Summary
-        GetPlayerSummaries getPlayerSummaries = steamUser.get(GetPlayerSummaries.class);
-        getPlayerSummaries.execute(
-            SteamHTTPMethod.GET, SteamHost.PUBLIC, SteamVersion.V_1, SteamVisibility.ALL,
-            Input.create().add("steamids", String.valueOf(steamid)).build(),
-                (request, response, body) -> {
-
-                    body.ifPresent(e -> {
-
-                        JsonArray root = e.getAsJsonObject("response").getAsJsonObject("players").getAsJsonArray("player");
-
-                        if(!(root.size() == 1)) {
-                            return;
-                        }
-
-                        JsonObject player = root.get(0).getAsJsonObject();
-
-                        //--- Set Avatar
-                        builder.avatar(
-                            SteamUserAvatar.builder()
-                                .avatar(player.get("avatar").getAsString())
-                                .medium(player.get("avatarmedium").getAsString())
-                                .full(player.get("avatarfull").getAsString())
-                            .build()
-                        );
-
-                        //--- States
-                        builder.communityVisibilityState(player.get("communityvisibilitystate").getAsInt());
-                        builder.profileState(player.get("profilestate").getAsInt());
-
-                        //--- Last Log Off
-                        builder.lastLogOff(player.get("lastlogoff").getAsLong());
-
-                    });
-
-                },
-            false
-        );
-
-
-        //--- Steam Level & Badges
-        GetBadges getBadges = playerService.get(GetBadges.class);
-        getBadges.execute(
-                SteamHTTPMethod.GET, SteamHost.PUBLIC, SteamVersion.V_1, SteamVisibility.ALL,
-                Input.create().add("steamid", steamid).build(),
-                (request, response, body) -> {
-
-                    body.ifPresent(e -> {
-
-                        JsonObject root = e.getAsJsonObject("response");
-
-                        //--- set level
-                        builder.steamLevel(root.get("player_level").getAsInt())
-                                .xp(root.get("player_xp").getAsInt())
-                                .xpToLevelUp(root.get("player_xp_needed_to_level_up").getAsInt())
-                                .xpCurrentLevel(root.get("player_xp_needed_current_level").getAsInt());
-
-                        //--- add bages
-                        JsonArray badges = root.getAsJsonArray("badges");
-                        badges.forEach(b -> {
-
-                            JsonObject badge = b.getAsJsonObject();
-
-                            builder.addBadge(
-                                SteamBadge.builder(badge.get("badgeid").getAsInt())
-                                    .level(badge.get("level").getAsInt())
-                                    .completionTime(badge.get("completion_time").getAsLong())
-                                    .xp(badge.get("xp").getAsInt())
-                                    .scarcity(badge.get("scarcity").getAsInt())
-                                .build()
-                            );
-                        });
-
-                    });
-
-                },
-            false
-        );
-
-        //--- Get Owned Games
-        GetOwnedGames getOwnedGames = playerService.get(GetOwnedGames.class);
-        getOwnedGames.execute(
-            SteamHTTPMethod.GET, SteamHost.PUBLIC, SteamVersion.V_1, SteamVisibility.ALL,
-            Input.create().add("steamid", steamid).add("include_appinfo", true).add("include_played_free_games", true).build(),
-            (request, response, body) -> {
-
-                body.ifPresent(e -> {
-                    //System.out.println();
-                });
-
-            },
-            false
-        );
-
-
-
-        return builder.build();
     }
 
     /**
