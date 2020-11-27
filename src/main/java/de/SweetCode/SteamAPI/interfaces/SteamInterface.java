@@ -83,7 +83,7 @@ public abstract class SteamInterface {
     public <T extends SteamMethod> T get(Class<T> method) {
 
         Assert.isNonEmpty(method, "The method cannot be null.");
-        Assert.is(true, this.steamMethods.containsKey(method), "The method %s could not be found.", method.getClass().getName());
+        Assert.is(true, this.steamMethods.containsKey(method), "The method %s could not be found.", method.getClass().toString());
 
         return (T) this.steamMethods.get(method);
     }
